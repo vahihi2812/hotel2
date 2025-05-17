@@ -43,11 +43,11 @@ public class RegisterController extends HttpServlet{
 			accountDAO.getIns().insert(acc);
 			
 			acc = accountDAO.getIns().findByUsernameAndPassword(username, password);
-			customer cus = new customer();
-			cus.setCustomer_firstname(username);
-			cus.setCustomer_lastname(username);
-			cus.setAccount_id(acc.getAccount_id());
-			customerDAO.getIns().insert(cus);
+//			customer cus = new customer();
+//			cus.setCustomer_firstname(username);
+//			cus.setCustomer_lastname(username);
+//			cus.setAccount_id(acc.getAccount_id());
+//			customerDAO.getIns().insert(cus);
 			
 			req.setAttribute("noti", "Tạo tài khoản thành công");
 			req.getRequestDispatcher("/adjsp/pages-register.jsp").forward(req, resp);

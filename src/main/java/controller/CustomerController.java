@@ -118,10 +118,6 @@ public class CustomerController extends HttpServlet{
 	    String customer_email = req.getParameter("customer_email");
 	    String customer_address = req.getParameter("customer_address");
 	    String customer_cccd = req.getParameter("customer_cccd");
-	    String str_acc_id = req.getParameter("customer_account_id");
-	    int account_id = 0;
-	    if(!str_acc_id.equals(""))
-	    	account_id = Integer.parseInt(str_acc_id);
 		
 		customer cus = customerDAO.getIns().selectById(customer_id);
 		
@@ -142,7 +138,6 @@ public class CustomerController extends HttpServlet{
 	    cus.setCustomer_email(customer_email);
 	    cus.setCustomer_address(customer_address);
 	    cus.setCustomer_cccd(customer_cccd);
-	    cus.setAccount_id(account_id);
 		
 		int kq = 0;
 		kq = customerDAO.getIns().update(cus);

@@ -28,26 +28,41 @@
 				<div class="col-lg-12">
 					<div class="card">
 						<div class="card-body">
-							<div class="d-flex justify-content-between align-items-center">
-							    <div class="d-flex align-items-center gap-2">
-							        <h5 class="card-title mb-0">Danh sách tài khoản</h5>
-							        
-							        <!-- Form với select để tự động submit khi thay đổi -->
-							        <form id="filterForm" method="GET" action="">
-							            <select name="filter" class="form-select form-select-sm" onchange="this.form.submit()">
-							                <option value="loc">Lọc</option>
-							                <option value="all">Tất cả</option>
-							                <option value="admin">Admin</option>
-							                <option value="cus">Khách hàng</option>
-							                <!-- Thêm các option khác nếu cần -->
-							            </select>
-							        </form>
-							    </div>
+							<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
 							
-							    <button type="button" class="btn btn-primary"
-							        data-bs-toggle="modal" data-bs-target="#addModal">
-							        <i class="bi bi-plus-circle"></i> Thêm tài khoản mới
-							    </button>
+							  <!-- Nhóm bên trái: tiêu đề, lọc và upload -->
+							  <div class="d-flex flex-wrap align-items-center gap-3">
+							
+							    <!-- Tiêu đề -->
+							    <h5 class="card-title mb-0">Danh sách tài khoản</h5>
+							
+							    <!-- Form lọc tài khoản -->
+							    <form id="filterForm" method="GET" action="" class="d-flex align-items-center gap-2">
+							      <label class="form-label mb-0 me-1" for="filterSelect">Lọc:</label>
+							      <select name="filter" id="filterSelect" class="form-select form-select-sm" onchange="this.form.submit()">
+							        <option value="loc">Lọc</option>
+							        <option value="all">Tất cả</option>
+							        <option value="admin">Admin</option>
+							        <option value="cus">Khách hàng</option>
+							      </select>
+							    </form>
+							
+							    <!-- Form upload Excel -->
+							    <form action="accounts" method="post" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
+							    	<input type="hidden" name="action" value="addbyexcel"/>
+							     	 <label for="excelFile" class="form-label mb-0">Thêm bằng file Excel:</label>
+							      		<input type="file" name="file" id="excelFile" class="form-control form-control-sm" accept=".xlsx" />
+							      	<button type="submit" class="btn btn-sm btn-primary">Thêm</button>
+							    </form>
+							
+							  </div>
+							
+							  <!-- Nút thêm tài khoản mới -->
+							  <button type="button" class="btn btn-primary d-flex align-items-center gap-1"
+							    data-bs-toggle="modal" data-bs-target="#addModal">
+							    <i class="bi bi-plus-circle"></i>
+							    <span>Thêm tài khoản mới</span>
+							  </button>
 							</div>
 
 							<!-- Table with stripped rows -->

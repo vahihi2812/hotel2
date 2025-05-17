@@ -1,12 +1,21 @@
 package controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 import dao.*;
 import model.*;
@@ -59,6 +68,8 @@ public class AccountController extends HttpServlet{
 		}
 		else if("edit".equals(action)){
 			editAcc(req, resp);
+		}else if("addbyexcel".equals(action)){
+			addAccByExcel(req, resp);
 		}
 	}
 	
@@ -121,5 +132,46 @@ public class AccountController extends HttpServlet{
 		}
 		resp.sendRedirect(req.getContextPath() + "/accounts?message=" + message);
 	}
+	
+	private void addAccByExcel(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		int kq = 1;
+		
+		Part filePart = req.getPart("file");
+        InputStream inputStream = filePart.getInputStream();
+		
+        try (Workbook workbook = new XSSFWorkbook(inputStream)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) continue; // bỏ dòng tiêu đề
+
+                String account_username = row.getCell(0).getStringCellValue();
+                String account_password = row.getCell(1).getStringCellValue();
+                int role_id = (int) row.getCell(2).getNumericCellValue();
+
+                saveToDB(account_username, account_password, role_id);
+            }
+        } catch (Exception e) {
+        	kq = 0;
+            e.printStackTrace();
+        }
+        
+		String message;
+		if (kq > 0) {
+		    message = "success";
+		} else {
+		    message = "fail";
+		}
+		resp.sendRedirect(req.getContextPath() + "/accounts?message=" + message);
+	}
+	
+	private void saveToDB(String account_username, String account_password, int role_id) throws SQLException {
+		account acc = new account();
+		acc.setAccount_username(account_username);
+		acc.setAccount_password(account_password);
+		acc.setRole_id(role_id);
+		acc.setAccount_status(1);
+		
+		accountDAO.getIns().insert(acc);
+    }
 
 }

@@ -187,7 +187,7 @@
 						</div>
 					
 						<div class="mb-3">
-							<label class="form-label">ID tài khoản</label>
+							<label class="form-label">ID tài khoản - Nhập 0 với khách hàng offline</label>
 							<input type="number" class="form-control" name="account_id" required>
 						</div>
 					</form>
@@ -252,7 +252,7 @@
 	                    <p class="customer_booking_time"></p>
 	                </div>
 	                <div class="mb-3">
-	                    <strong>ID Tài khoản: </strong>
+	                    <strong>ID Tài khoản:</strong>
 	                    <p class="customer_account_id"></p>
 	                </div>
 	            </div>
@@ -321,7 +321,7 @@
 						</div>
 						<div class="mb-3">
 							<label class="form-label">Mã tài khoản</label>
-							<input type="text" class="form-control" name="customer_account_id"/>
+							<input type="text" class="form-control" name="customer_account_id" disabled/>
 						</div>
 					</form>
 				</div>
@@ -422,4 +422,5 @@
 
 </body>
 <%@include file="/adjsp/lib/footer.jsp"%>
+<script src="adjs/customer-validate.js"></script>
 </html>

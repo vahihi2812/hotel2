@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import model.account;
+import model.customer;
+import model.user;
 import util.JDBCUtil;
 
 public class accountDAO implements daoInterface<account> {
@@ -27,6 +29,19 @@ public class accountDAO implements daoInterface<account> {
             ps.setInt(4, t.getRole_id());
             
             kq = ps.executeUpdate();
+            int account_id = accountDAO.getIns().findByUsername(t.getAccount_username());
+            
+            if(kq == 1) {
+            	if(t.getRole_id() == 1) {
+            		user u = new user(0, t.getAccount_username(), null, "", 0, "", "", account_id);
+            		
+            		kq = userDAO.getInstance().insert(u);
+            	}else if(t.getRole_id() == 2) {
+            		customer cus = new customer(0, t.getAccount_username(), t.getAccount_username(), null, 0, "", "", "", "", 0, account_id);
+            		
+            		kq = customerDAO.getIns().insert(cus);
+            	}
+            }
         } catch (Exception e) {
             System.out.println("insert account " + e);
         }

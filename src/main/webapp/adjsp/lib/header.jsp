@@ -94,7 +94,7 @@
 			<div class="d-flex align-items-center justify-content-between">
 				<a href="<%=request.getContextPath()%>/home"
 					class="logo d-flex align-items-center"> <img
-					src="adimg/logo.png" alt=""> <span class="d-none d-lg-block">Admin</span>
+					src="adimg/logo.png" alt=""> <span class="d-none d-lg-block">Quản lý</span>
 				</a> <i class="bi bi-list toggle-sidebar-btn"></i>
 			</div>
 			<!-- End Logo -->
@@ -107,7 +107,7 @@
 						class="nav-link nav-profile d-flex align-items-center pe-0"
 						href="#" data-bs-toggle="dropdown"> <img
 							src="adimg/profile-img.jpg" alt="Profile" class="rounded-circle">
-							<span class="d-none d-md-block dropdown-toggle ps-2">Hi, <%=u.getUser_fullname()%></span>
+							<span class="d-none d-md-block dropdown-toggle ps-2">Chào, <%=u.getUser_fullname()%></span>
 					</a>
 	
 						<ul

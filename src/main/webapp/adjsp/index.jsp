@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="dao.booking_reportDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,41 +27,71 @@
         <div class="col-lg-8">
           <div class="row">
 
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card sales-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Lọc</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Số lượt đặt phòng<span>   | Hôm nay</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-cart"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>145</h6>
-                      <span class="text-success small pt-1 fw-bold"></span> <span
-                        class="text-muted small pt-2 ps-1">Lượt</span>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- End Sales Card -->
+			<!-- Sales Card -->
+				<div class="col-xxl-4 col-md-6">
+				  <div class="card info-card sales-card">
+				
+				    <div class="filter">
+				      <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+				      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+				        <li class="dropdown-header text-start">
+				          <h6>Lọc</h6>
+				        </li>
+				        <li><a class="dropdown-item" href="#" data-filter="today" data-text="Hôm nay">Hôm nay</a></li>
+				        <li><a class="dropdown-item" href="#" data-filter="month" data-text="Tháng này">Tháng này</a></li>
+				        <li><a class="dropdown-item" href="#" data-filter="year" data-text="Năm nay">Năm nay</a></li>
+				      </ul>
+				    </div>
+				
+				    <div class="card-body">
+				      <h5 class="card-title">Số lượt đặt phòng <span class="tg">Hôm nay</span></h5>
+				
+				      <div class="d-flex align-items-center">
+				        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+				          <i class="bi bi-cart"></i>
+				        </div>
+				        <div class="ps-3">
+				          <h6 class="dl"></h6>
+				          <span class="text-success small pt-1 fw-bold"></span>
+				          <span class="text-muted small pt-2 ps-1">Lượt</span>
+				        </div>
+				      </div>
+				    </div>
+				  </div>
+				</div><!-- End Sales Card -->
+			
+			<script>
+			<%
+				ArrayList<Integer> list = (ArrayList<Integer>)request.getAttribute("br_list");
+			%>
+				document.addEventListener("DOMContentLoaded", () => {
+				  const salesData = {
+				    today: <%=list.get(2) %>,
+				    month: <%=list.get(1) %>,
+				    year: <%=list.get(0) %>
+				  };
+				
+				  const salesValueElement = document.querySelector(".sales-card .dl");
+				  const ttg = document.querySelector(".sales-card .tg");
+				
+				  // Gán mặc định ban đầu là hôm nay
+				  salesValueElement.textContent = salesData.today;
+				  ttg.textContent = "Hôm nay";
+				
+				  document.querySelectorAll(".sales-card .dropdown-item").forEach(item => {
+				    item.addEventListener("click", (e) => {
+				      e.preventDefault();
+				      const filter = item.getAttribute("data-filter");
+				      const label = item.getAttribute("data-text");
+				
+				      if (salesData.hasOwnProperty(filter)) {
+				        salesValueElement.textContent = salesData[filter];
+				        ttg.textContent = label;
+				      }
+				    });
+				  });
+				});
+				</script>
 
             <!-- Revenue Card -->
             <div class="col-xxl-4 col-md-6">
@@ -72,30 +104,59 @@
                       <h6>Filter</h6>
                     </li>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                    <li><a class="dropdown-item" href="#" data-filter="today" data-text="Hôm nay">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#" data-filter="month" data-text="Tháng này">Tháng này</a></li>
+                    <li><a class="dropdown-item" href="#" data-filter="year" data-text="Năm nay">Năm nay</a></li>
                   </ul>
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Doanh thu <span>| Tháng này</span></h5>
+                  <h5 class="card-title">Doanh thu <span class="tg_1"></span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-currency-dollar"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>3.2M đồng</h6>
+                      <h6 class="dl_1"></h6>
                       <span class="text-success small pt-1 fw-bold">8%</span> <span
                         class="text-muted small pt-2 ps-1">tăng</span>
-
                     </div>
                   </div>
                 </div>
 
               </div>
             </div><!-- End Revenue Card -->
+
+			<script>
+				document.addEventListener("DOMContentLoaded", () => {
+				  const revData = {
+				    today: 123,
+				    month: 456,
+				    year: 789
+				  };
+				
+				  const revValueElement = document.querySelector(".revenue-card .dl_1");
+				  const ttg_1 = document.querySelector(".revenue-card .tg_1");
+				
+				  // Gán mặc định ban đầu là hôm nay
+				  revValueElement.textContent = revData.today;
+				  ttg_1.textContent = "Hôm nay";
+				
+				  document.querySelectorAll(".revenue-card .dropdown-item").forEach(item => {
+				    item.addEventListener("click", (e) => {
+				      e.preventDefault();
+				      const filter_1 = item.getAttribute("data-filter");
+				      const label_1 = item.getAttribute("data-text");
+				
+				      if (revData.hasOwnProperty(filter_1)) {
+				        revValueElement.textContent = revData[filter_1];
+				        ttg_1.textContent = label_1;
+				      }
+				    });
+				  });
+				});
+				</script>
 
             <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-12">
@@ -109,21 +170,21 @@
                       <h6>Filter</h6>
                     </li>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                    <li><a class="dropdown-item" href="#" data-filter="today" data-text="Hôm nay">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#" data-filter="month" data-text="Tháng này">Tháng này</a></li>
+                    <li><a class="dropdown-item" href="#" data-filter="year" data-text="Năm nay">Năm nay</a></li>
                   </ul>
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Khách hàng mới<span>  | Năm nay</span></h5>
+                  <h5 class="card-title">Khách hàng mới <span class="tg_2">  Hôm nay</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>120</h6>
+                      <h6 class="dl_2"></h6>
                       <span class="text-danger small pt-1 fw-bold">12%</span> <span
                         class="text-muted small pt-2 ps-1">giảm</span>
                     </div>
@@ -133,6 +194,36 @@
               </div>
 
             </div><!-- End Customers Card -->
+            
+            <script>
+				document.addEventListener("DOMContentLoaded", () => {
+				  const cusData = {
+				    today: 123,
+				    month: 456,
+				    year: 789
+				  };
+				
+				  const cusValueElement = document.querySelector(".customers-card .dl_2");
+				  const ttg_2 = document.querySelector(".customers-card .tg_2");
+				
+				  // Gán mặc định ban đầu là hôm nay
+				  cusValueElement.textContent = cusData.today;
+				  ttg_2.textContent = "Hôm nay";
+				
+				  document.querySelectorAll(".customers-card .dropdown-item").forEach(item => {
+				    item.addEventListener("click", (e) => {
+				      e.preventDefault();
+				      const filter_2 = item.getAttribute("data-filter");
+				      const label_2 = item.getAttribute("data-text");
+				
+				      if (cusData.hasOwnProperty(filter_2)) {
+				        cusValueElement.textContent = cusData[filter_2];
+				        ttg_2.textContent = label_2;
+				      }
+				    });
+				  });
+				});
+			</script>
 
             <!-- Reports -->
             <div class="col-12">
