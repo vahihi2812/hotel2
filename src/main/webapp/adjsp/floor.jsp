@@ -56,14 +56,14 @@
 		                                            data-floor-id="${f.floor_id}"
 		                                            data-floor-name="${f.floor_name}"
 		                                            data-floor-description="${f.floor_description}">
-		                                            Xem
+		                                            <i class="bi bi-eye"></i>
 		                                        </button>
 		
 		                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
 		                                            data-floor-id="${f.floor_id}"
 		                                            data-floor-name="${f.floor_name}"
 		                                            data-floor-description="${f.floor_description}">
-		                                            Sửa
+		                                            <i class="bi bi-pencil"></i>
 		                                        </button>
 		                                    </td>
 		                                </tr>

@@ -126,7 +126,7 @@
 		                                            data-room-floor-id="${r.floor_id}"
 		                                            data-room-rt-id="${r.rt_id}"
 		                                            data-room-rs-id="${r.rs_id}">
-		                                            Xem
+		                                            <i class="bi bi-eye"></i>
 		                                        </button>
 		
 		                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
@@ -138,7 +138,7 @@
 		                                            data-room-floor-id="${r.floor_id}"
 		                                            data-room-rt-id="${r.rt_id}"
 		                                            data-room-rs-id="${r.rs_id}">
-		                                            Sửa
+		                                            <i class="bi bi-pencil"></i>
 		                                        </button>
 		                                    </td>
 		                                </tr>

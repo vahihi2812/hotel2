@@ -29,7 +29,7 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-layout-text-window-reverse"></i><span>Cơ sở vật chất</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="bi bi-tools"></i><span>Cơ sở vật chất</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         
@@ -42,22 +42,51 @@
 		      
 		      <li class="nav-item">
 		        <a class="nav-link" href="<%=request.getContextPath()%>/room_type">
-		          <i class="bi bi-building"></i>
+		          <i class="bi bi-building-gear"></i>
 		          <span>Quản lý loại phòng</span>
 		        </a>
 		      </li>
 		      
 		      <li class="nav-item">
 		        <a class="nav-link" href="<%=request.getContextPath()%>/rooms">
-		          <i class="bi bi-building"></i>
+		          <i class="bi bi-wrench"></i>
 		          <span>Quản lý phòng</span>
+		        </a>
+		      </li>
+        </ul>
+      </li><!-- End Tables Nav -->
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tke-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-bar-chart"></i><span>Thống kê</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tke-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+        
+              <li class="nav-item">
+		        <a class="nav-link" href="<%=request.getContextPath()%>/booking_report">
+		          <i class="bi bi-bell"></i>
+		          <span>Lượt đặt phòng</span>
+		        </a>
+		      </li>
+		      
+		      <li class="nav-item">
+		        <a class="nav-link" href="<%=request.getContextPath()%>/customer_report">
+		          <i class="bi bi-people-fill"></i>
+		          <span>Khách hàng</span>
+		        </a>
+		      </li>
+		      
+		      <li class="nav-item">
+		        <a class="nav-link" href="<%=request.getContextPath()%>/revenue_report">
+		          <i class="bi bi-currency-dollar"></i>
+		          <span>Doanh thu</span>
 		        </a>
 		      </li>
         </ul>
       </li><!-- End Tables Nav -->
 
       <li class="nav-item">
-        <a class="nav-link" href="<%=request.getContextPath()%>/customers">
+        <a class="nav-link" href="<%=request.getContextPath()%>/booking">
           <i class="bi bi-table"></i>
           <span>Quản lý đặt phòng</span>
         </a>

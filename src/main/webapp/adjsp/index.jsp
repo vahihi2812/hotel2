@@ -198,9 +198,9 @@
             <script>
 				document.addEventListener("DOMContentLoaded", () => {
 				  const cusData = {
-				    today: 123,
-				    month: 456,
-				    year: 789
+				    today: <%=list.get(5) %>,
+				    month: <%=list.get(4) %>,
+				    year: <%=list.get(3) %>
 				  };
 				
 				  const cusValueElement = document.querySelector(".customers-card .dl_2");

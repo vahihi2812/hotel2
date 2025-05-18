@@ -63,7 +63,7 @@
 		                                            data-rt-price="${rt.rt_price}"
 		                                            data-rt-max-occupancy="${rt.rt_max_occupancy}"
 		                                            data-rt-is-smoking-allowed="${rt.rt_is_smoking_allowed}">
-		                                            Xem
+		                                            <i class="bi bi-eye"></i>
 		                                        </button>
 		
 		                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
@@ -73,7 +73,7 @@
 		                                            data-rt-price="${rt.rt_price}"
 		                                            data-rt-max-occupancy="${rt.rt_max_occupancy}"
 		                                            data-rt-is-smoking-allowed="${rt.rt_is_smoking_allowed}">
-		                                            Sửa
+		                                            <i class="bi bi-pencil"></i>
 		                                        </button>
 		                                    </td>
 		                                </tr>

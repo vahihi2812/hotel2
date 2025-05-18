@@ -88,7 +88,7 @@ public class bookingDAO implements daoInterface<booking> {
     @Override
     public ArrayList<booking> selectAll() {
         ArrayList<booking> list = new ArrayList<>();
-        String sql = "SELECT * FROM booking";
+        String sql = "SELECT * FROM booking order by booking_time desc";
         try (Connection con = JDBCUtil.getConn();
              PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {

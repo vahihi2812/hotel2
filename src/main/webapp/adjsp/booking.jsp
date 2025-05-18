@@ -1,3 +1,4 @@
+<%@page import="model.room"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 	<html lang="en">
@@ -11,14 +12,23 @@
 <%@include file="/adjsp/lib/header.jsp"%>
 <%@include file="/adjsp/lib/sidebar.jsp"%>
 <body>			
+		<%
+		    String[] rooms = new String[50];
+		    for (int i = 0; i < 50; i++) {
+		        int floor = i / 10 + 1;
+		        int num = i % 10 + 1;
+		        rooms[i] = "Phòng " + floor + String.format("%02d", num);
+		    }
+		    request.setAttribute("rooms", rooms);
+		%>
 	<main id="main" class="main">
 		
 		<div class="pagetitle">
-			<h1>Quản lý tài khoản</h1>
+			<h1>Quản lý đặt phòng</h1>
 			<nav>
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="<%=request.getContextPath() %>/home">Trang chủ</a></li>
-					<li class="breadcrumb-item active">Quản lý tài khoản</li>
+					<li class="breadcrumb-item active">Quản lý đặt phòng</li>
 				</ol>
 			</nav>
 		</div>
@@ -34,35 +44,54 @@
 							  <div class="d-flex flex-wrap align-items-center gap-3">
 							
 							    <!-- Tiêu đề -->
-							    <h5 class="card-title mb-0">Danh sách tài khoản</h5>
+							    <h5 class="card-title mb-0">Danh sách đặt phòng</h5>
 							
-							    <!-- Form lọc tài khoản -->
-							    <form id="filterForm" method="GET" action="" class="d-flex align-items-center gap-2">
-							      <label class="form-label mb-0 me-1" for="filterSelect">Lọc:</label>
-							      <select name="filter" id="filterSelect" class="form-select form-select-sm" onchange="this.form.submit()">
-							        <option value="loc">Lọc</option>
-							        <option value="all">Tất cả</option>
-							        <option value="admin">Admin</option>
-							        <option value="cus">Khách hàng</option>
-							      </select>
-							    </form>
-							
-							    <!-- Form upload Excel -->
-							    <form action="accounts" method="post" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
-							    	<input type="hidden" name="action" value="addbyexcel"/>
-							     	 <label for="excelFile" class="form-label mb-0">Thêm bằng file Excel:</label>
-							      		<input type="file" name="file" id="excelFile" class="form-control form-control-sm" accept=".xlsx" />
-							      	<button type="submit" class="btn btn-sm btn-primary">Thêm</button>
-							    </form>
+							    <!-- Form lọc danh sách phòng -->
+			                    <form action="rooms" method="get" class="mb-3">
+			                        <div class="row g-3 align-items-end">
+			                            <!-- Loại phòng -->
+			                            <div class="col-md-3">
+			                                <label class="form-label">Loại phòng</label>
+			                                <select name="rt_id" class="form-select">
+			                                    <option value="all">Tất cả</option>
+			                                    <option value="1" ${param.rt_id == '1' ? 'selected' : ''}>Bình dân</option>
+			                                    <option value="2" ${param.rt_id == '2' ? 'selected' : ''}>Cao cấp</option>
+			                                </select>
+			                            </div>
+			
+			                            <!-- Trạng thái -->
+			                            <div class="col-md-3">
+			                                <label class="form-label">Trạng thái</label>
+			                                <select name="rs_id" class="form-select">
+			                                    <option value="all">Tất cả</option>
+			                                    <option value="1" ${param.rs_id == '1' ? 'selected' : ''}>Đang trống</option>
+			                                    <option value="2" ${param.rs_id == '2' ? 'selected' : ''}>Đang được đặt</option>
+			                                    <option value="3" ${param.rs_id == '3' ? 'selected' : ''}>Đang bảo trì</option>
+			                                </select>
+			                            </div>
+			
+			                            <!-- Tầng -->
+			                            <div class="col-md-3">
+			                                <label class="form-label">Tầng</label>
+			                                <select name="floor_id" class="form-select">
+			                                    <option value="all">Tất cả</option>
+			                                    <option value="1">1</option>
+			                                    <option value="2">2</option>
+			                                    <option value="3">3</option>
+			                                    <option value="4">4</option>
+			                                    <option value="5">5</option>
+			                                </select>
+			                            </div>
+			
+			                            <!-- Nút lọc -->
+			                            <div class="col-md-3">
+			                                <button type="submit" class="btn btn-primary">Lọc</button>
+			                            </div>
+			                        </div>
+			                    </form>
+			                    <!-- Kết thúc Form lọc -->
 							
 							  </div>
-							
-							  <!-- Nút thêm tài khoản mới -->
-							  <button type="button" class="btn btn-primary d-flex align-items-center gap-1"
-							    data-bs-toggle="modal" data-bs-target="#addModal">
-							    <i class="bi bi-plus-circle"></i>
-							    <span>Thêm tài khoản mới</span>
-							  </button>
 							</div>
 
 							<!-- Table with stripped rows -->
@@ -70,50 +99,35 @@
 								<thead>
 									<tr>
 										<th><b>S</b>TT</th>
-										<th>Tên đăng nhập</th>
-										<th>Vai trò</th>
+										<th>Phòng</th>
+										<th>Ngày bắt đầu</th>
+										<th>Ngày kết thúc</th>
+										<th>Tổng chi phí</th>
+										<th>Trạng thái</th>										
 										<th>Chức năng</th>
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="acc" items="${list_acc}" varStatus="loop">
+									<c:forEach var="bk" items="${listbk}" varStatus="loop">
 								        <tr>
 								            <td>${loop.index + 1}</td>
-								            <td>${acc.account_username}</td>
+								            <td>${rooms[bk.room_id]}</td>
+								            <td>${bk.booking_start_date}</td>
+								            <td>${bk.booking_end_date}</td>
+								            <td>${bk.booking_total_cost}</td>
 								            <td>
 								                <c:choose>
-								                    <c:when test="${acc.role_id == 1}">Admin</c:when>
-								                    <c:otherwise>Khách hàng</c:otherwise>
+								                    <c:when test="${bk.bs_id == 1}">Đang đặt</c:when>
+								                    <c:otherwise>Đã thanh toán</c:otherwise>
 								                </c:choose>
 								            </td>
 								            <td>
 								                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal"
-								                    data-account-id="${acc.account_id}"
-								                    data-account-username="${acc.account_username}"
-								                    data-account-password="${acc.account_password}"
-								                    data-account-status="${acc.account_status}"
-								                    data-account-created-at="${acc.account_created_at}"
-								                    data-account-updated-at="${acc.account_updated_at}"
-								                    data-account-last-login-at="${acc.account_last_login_at}"
-								                    data-account-login-time="${acc.account_login_time}"
-								                    data-role-id="${acc.role_id}">
+								                    >
 								                    <i class="bi bi-eye"></i>
 								                </button>
 								                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
-								                    data-account-id="${acc.account_id}"
-								                    data-account-username="${acc.account_username}"
-								                    data-account-password="${acc.account_password}"
-								                    data-account-status="${acc.account_status}"
-								                    data-account-created-at="${acc.account_created_at}"
-								                    data-account-updated-at="${acc.account_updated_at}"
-								                    data-account-last-login-at="${acc.account_last_login_at}"
-								                    data-account-login-time="${acc.account_login_time}"
-								                    data-role-id="${acc.role_id}">
-								                    <i class="bi bi-pencil"></i>
-								                </button>
-								                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
-								                    data-account-id="${acc.account_id}"
-								                    data-account-username="${acc.account_username}">
+								                    >
 								                    <i class="bi bi-trash"></i>
 								                </button>
 								            </td>
@@ -131,43 +145,6 @@
 		</section>
 	</main>
   </body>
-
-	<!-- Add Modal -->
-	<div class="modal fade" id="addModal" tabindex="-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Thêm tài khoản mới</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-				</div>
-				<div class="modal-body">
-					<form id="addForm" action="accounts" method="post">
-						<input type="hidden" name="action" value="add" />
-						<div class="mb-3">
-							<label class="form-label">Tên đăng nhập</label> <input
-								type="text" class="form-control" name="account_username" required>
-						</div>
-						<div class="mb-3">
-							<label class="form-label">Mật khẩu</label> <input type="password"
-								class="form-control" name="account_password" required>
-						</div>
-						<div class="mb-3">
-							<label class="form-label">Vai trò</label> <select
-								class="form-select" name="role_id" required>
-								<option value="1">Admin</option>
-								<option value="2">Khách hàng</option>
-							</select>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">Đóng</button>
-					<button type="submit" form="addForm" class="btn btn-primary">Lưu</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<!-- View Modal -->
 	<div class="modal fade" id="viewModal" tabindex="-1">
@@ -251,31 +228,6 @@
 					<button type="submit" form="editForm" class="btn btn-primary">Lưu
 						thay đổi</button>
 				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Delete Modal -->
-	<div class="modal fade" id="deleteModal" tabindex="-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form id="deleteForm" action="accounts" method="post">
-					<!-- Hidden field để truyền username hoặc id -->
-					<input type="hidden" name="account_id" id="account_id" /> <input type="hidden"
-						name="action" value="delete" />
-					<div class="modal-header">
-						<h5 class="modal-title">Xác nhận xóa tài khoản</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-					</div>
-					<div class="modal-body">
-						<p>Bạn có chắc chắn muốn xóa tài khoản này?</p>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Hủy</button>
-						<button type="submit" class="btn btn-danger">Xóa</button>
-					</div>
-				</form>
 			</div>
 		</div>
 	</div>

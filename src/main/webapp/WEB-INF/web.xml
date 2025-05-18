@@ -108,6 +108,42 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>BookingController</servlet-name>
+		<servlet-class>controller.BookingController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BookingController</servlet-name>
+		<url-pattern>/booking</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Booking_reportController</servlet-name>
+		<servlet-class>controller.Booking_reportController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Booking_reportController</servlet-name>
+		<url-pattern>/booking_report</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Customer_reportController</servlet-name>
+		<servlet-class>controller.Customer_reportController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Customer_reportController</servlet-name>
+		<url-pattern>/customer_report</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Revenue_reportController</servlet-name>
+		<servlet-class>controller.Revenue_reportController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Revenue_reportController</servlet-name>
+		<url-pattern>/revenue_report</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>ErrorController</servlet-name>
 		<servlet-class>controller.ErrorController</servlet-class>
 	</servlet>

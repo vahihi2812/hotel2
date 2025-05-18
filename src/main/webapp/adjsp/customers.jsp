@@ -95,7 +95,7 @@
 												        data-customer-cccd="${cus.customer_cccd}"
 												        data-customer-booking-time="${cus.customer_booking_time}"
 												        data-customer-account-id="${cus.account_id}">
-												    	Xem
+												    	<i class="bi bi-eye"></i>
 												</button>
 												
 								                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
@@ -110,11 +110,11 @@
 												        data-customer-cccd="${cus.customer_cccd}"
 												        data-customer-booking-time="${cus.customer_booking_time}"
 												        data-customer-account-id="${cus.account_id}">
-												    	Sửa
+												    	<i class="bi bi-pencil"></i>
 								                </button>
 								                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
 								                    data-customer-id="${cus.customer_id}">
-								                    Xóa
+								                    <i class="bi bi-trash"></i>
 								                </button>
 								            </td>
 								        </tr>

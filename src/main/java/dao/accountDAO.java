@@ -3,16 +3,32 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.account;
 import model.customer;
 import model.user;
+import util.ConnectionPoolImpl;
 import util.JDBCUtil;
 
 public class accountDAO implements daoInterface<account> {
 
-    public static accountDAO getIns() {
+	private Connection con;
+	
+	public accountDAO() {
+		try {
+			this.con = ConnectionPoolImpl.getInstance().getConnection("account");
+			
+			// Chấm dứt chế độ thực thi tự động của kết nối
+			//if(this.con.getAutoCommit() == true)
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+    public static accountDAO getIns(){
         return new accountDAO();
     }
 
