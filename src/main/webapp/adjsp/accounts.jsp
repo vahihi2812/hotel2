@@ -35,17 +35,17 @@
 							
 							    <!-- Tiêu đề -->
 							    <h5 class="card-title mb-0">Danh sách tài khoản</h5>
+							    
 							
 							    <!-- Form lọc tài khoản -->
-							    <form id="filterForm" method="GET" action="" class="d-flex align-items-center gap-2">
-							      <label class="form-label mb-0 me-1" for="filterSelect">Lọc:</label>
-							      <select name="filter" id="filterSelect" class="form-select form-select-sm" onchange="this.form.submit()">
-							        <option value="loc">Lọc</option>
-							        <option value="all">Tất cả</option>
-							        <option value="admin">Admin</option>
-							        <option value="cus">Khách hàng</option>
-							      </select>
+							    <form id="filterForm" class="d-flex align-items-center gap-2">
+							      <select name="filter" id="filterSelect" class="form-select form-select-sm" onchange="filterByRole()">
+									  <option value="all" ${filter == 'all' ? 'selected' : ''}>Tất cả</option>
+									  <option value="admin" ${filter == 'admin' ? 'selected' : ''}>Admin</option>
+									  <option value="cus" ${filter == 'cus' ? 'selected' : ''}>Khách hàng</option>
+								   </select>
 							    </form>
+							    
 							
 							    <!-- Form upload Excel -->
 							    <form action="accounts" method="post" enctype="multipart/form-data" class="d-flex align-items-center gap-2">
@@ -279,6 +279,22 @@
 			</div>
 		</div>
 	</div>
+	
+	<script>
+		function filterByRole() {
+			  const filterValue = document.getElementById("filterSelect").value;
+	
+			  fetch("accounts?filter=" + filterValue)
+			    .then(response => response.text())
+			    .then(html => {
+			      document.open();
+			      document.write(html);
+			      document.close();
+			    })
+			    .catch(err => console.error(err));
+			  document.getElementById("filterSelect").value = filterValue;
+			}
+	</script>
 
 	<script type="text/javascript">
 		var editModal = document.getElementById('editModal');

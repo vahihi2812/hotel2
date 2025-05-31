@@ -1,74 +1,87 @@
+<%@page import="model.booking_report"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="dao.booking_reportDAO"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <!DOCTYPE html>
 <html lang="en">
 <%@include file="/adjsp/lib/header.jsp"%>
 <%@include file="/adjsp/lib/sidebar.jsp"%>
 <body>
 
-  <main id="main" class="main">
+	<main id="main" class="main">
 
-    <!-- Page Title -->
-    <div class="pagetitle">
-      <h1>Trang chủ</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/home"><i class="bi bi-house"></i></a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+		<!-- Page Title -->
+		<div class="pagetitle">
+			<h1>Trang chủ</h1>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a
+						href="<%=request.getContextPath()%>/home"><i
+							class="bi bi-house"></i></a></li>
+					<li class="breadcrumb-item active">Dashboard</li>
+				</ol>
+			</nav>
+		</div>
+		<!-- End Page Title -->
 
-    <section class="section dashboard">
-      <div class="row">
+		<section class="section dashboard">
+			<div class="row">
+				<!-- Left side columns -->
+				<div class="col-lg-8">
+					<div class="row">
 
-        <!-- Left side columns -->
-        <div class="col-lg-8">
-          <div class="row">
+						<!-- Sales Card -->
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card sales-card">
 
-			<!-- Sales Card -->
-				<div class="col-xxl-4 col-md-6">
-				  <div class="card info-card sales-card">
-				
-				    <div class="filter">
-				      <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-				      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-				        <li class="dropdown-header text-start">
-				          <h6>Lọc</h6>
-				        </li>
-				        <li><a class="dropdown-item" href="#" data-filter="today" data-text="Hôm nay">Hôm nay</a></li>
-				        <li><a class="dropdown-item" href="#" data-filter="month" data-text="Tháng này">Tháng này</a></li>
-				        <li><a class="dropdown-item" href="#" data-filter="year" data-text="Năm nay">Năm nay</a></li>
-				      </ul>
-				    </div>
-				
-				    <div class="card-body">
-				      <h5 class="card-title">Số lượt đặt phòng <span class="tg">Hôm nay</span></h5>
-				
-				      <div class="d-flex align-items-center">
-				        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-				          <i class="bi bi-cart"></i>
-				        </div>
-				        <div class="ps-3">
-				          <h6 class="dl"></h6>
-				          <span class="text-success small pt-1 fw-bold"></span>
-				          <span class="text-muted small pt-2 ps-1">Lượt</span>
-				        </div>
-				      </div>
-				    </div>
-				  </div>
-				</div><!-- End Sales Card -->
-			
-			<script>
-			<%
-				ArrayList<Integer> list = (ArrayList<Integer>)request.getAttribute("br_list");
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i
+										class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Lọc</h6>
+										</li>
+										<li><a class="dropdown-item" href="#" data-filter="today"
+											data-text="Hôm nay">Hôm nay</a></li>
+										<li><a class="dropdown-item" href="#" data-filter="month"
+											data-text="Tháng này">Tháng này</a></li>
+										<li><a class="dropdown-item" href="#" data-filter="year"
+											data-text="Năm nay">Năm nay</a></li>
+									</ul>
+								</div>
+
+								<div class="card-body">
+									<h5 class="card-title">
+										Số lượt đặt phòng <span class="tg">Hôm nay</span>
+									</h5>
+
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-cart"></i>
+										</div>
+										<div class="ps-3">
+											<h6 class="dl"></h6>
+											<span class="text-success small pt-1 fw-bold"></span> <span
+												class="text-muted small pt-2 ps-1">Lượt</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- End Sales Card -->
+
+						<script>
+			<%ArrayList<Integer> list = (ArrayList<Integer>) request.getAttribute("total_list");
+			ArrayList<Double> list1 = (ArrayList<Double>) request.getAttribute("list1");
+			ArrayList<Integer> list2 = (ArrayList<Integer>) request.getAttribute("list_ss");
 			%>
 				document.addEventListener("DOMContentLoaded", () => {
 				  const salesData = {
-				    today: <%=list.get(2) %>,
-				    month: <%=list.get(1) %>,
-				    year: <%=list.get(0) %>
+				    today: <%=list.get(2)%>,
+				    month: <%=list.get(1)%>,
+				    year: <%=list.get(0)%>
 				  };
 				
 				  const salesValueElement = document.querySelector(".sales-card .dl");
@@ -93,47 +106,55 @@
 				});
 				</script>
 
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card revenue-card">
+						<!-- Revenue Card -->
+						<div class="col-xxl-4 col-md-6">
+							<div class="card info-card revenue-card">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i
+										class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Filter</h6>
+										</li>
 
-                    <li><a class="dropdown-item" href="#" data-filter="today" data-text="Hôm nay">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#" data-filter="month" data-text="Tháng này">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#" data-filter="year" data-text="Năm nay">Năm nay</a></li>
-                  </ul>
-                </div>
+										<li><a class="dropdown-item" href="#" data-filter="today"
+											data-text="Hôm nay">Hôm nay</a></li>
+										<li><a class="dropdown-item" href="#" data-filter="month"
+											data-text="Tháng này">Tháng này</a></li>
+										<li><a class="dropdown-item" href="#" data-filter="year"
+											data-text="Năm nay">Năm nay</a></li>
+									</ul>
+								</div>
 
-                <div class="card-body">
-                  <h5 class="card-title">Doanh thu <span class="tg_1"></span></h5>
+								<div class="card-body">
+									<h5 class="card-title">
+										Doanh thu <span class="tg_1"></span>
+									</h5>
 
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-currency-dollar"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 class="dl_1"></h6>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span
-                        class="text-muted small pt-2 ps-1">tăng</span>
-                    </div>
-                  </div>
-                </div>
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-currency-dollar"></i>
+										</div>
+										<div class="ps-3">
+											<h6 class="dl_1"></h6>
+											<span class="text-success small pt-1 fw-bold">8%</span> <span
+												class="text-muted small pt-2 ps-1">tăng</span>
+										</div>
+									</div>
+								</div>
 
-              </div>
-            </div><!-- End Revenue Card -->
+							</div>
+						</div>
+						<!-- End Revenue Card -->
 
-			<script>
+						<script>
 				document.addEventListener("DOMContentLoaded", () => {
 				  const revData = {
-				    today: 123,
-				    month: 456,
-				    year: 789
+					today: <%=list1.get(2)%>,
+					month: <%=list1.get(1)%>,
+					year: <%=list1.get(0)%>
 				  };
 				
 				  const revValueElement = document.querySelector(".revenue-card .dl_1");
@@ -158,49 +179,57 @@
 				});
 				</script>
 
-            <!-- Customers Card -->
-            <div class="col-xxl-4 col-xl-12">
+						<!-- Customers Card -->
+						<div class="col-xxl-4 col-xl-12">
 
-              <div class="card info-card customers-card">
+							<div class="card info-card customers-card">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i
+										class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Filter</h6>
+										</li>
 
-                    <li><a class="dropdown-item" href="#" data-filter="today" data-text="Hôm nay">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#" data-filter="month" data-text="Tháng này">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#" data-filter="year" data-text="Năm nay">Năm nay</a></li>
-                  </ul>
-                </div>
+										<li><a class="dropdown-item" href="#" data-filter="today"
+											data-text="Hôm nay">Hôm nay</a></li>
+										<li><a class="dropdown-item" href="#" data-filter="month"
+											data-text="Tháng này">Tháng này</a></li>
+										<li><a class="dropdown-item" href="#" data-filter="year"
+											data-text="Năm nay">Năm nay</a></li>
+									</ul>
+								</div>
 
-                <div class="card-body">
-                  <h5 class="card-title">Khách hàng mới <span class="tg_2">  Hôm nay</span></h5>
+								<div class="card-body">
+									<h5 class="card-title">
+										Khách hàng mới <span class="tg_2"> Hôm nay</span>
+									</h5>
 
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 class="dl_2"></h6>
-                      <span class="text-danger small pt-1 fw-bold">12%</span> <span
-                        class="text-muted small pt-2 ps-1">giảm</span>
-                    </div>
-                  </div>
+									<div class="d-flex align-items-center">
+										<div
+											class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+											<i class="bi bi-people"></i>
+										</div>
+										<div class="ps-3">
+											<h6 class="dl_2"></h6>
+											<span class="text-danger small pt-1 fw-bold">12%</span> <span
+												class="text-muted small pt-2 ps-1">giảm</span>
+										</div>
+									</div>
 
-                </div>
-              </div>
+								</div>
+							</div>
 
-            </div><!-- End Customers Card -->
-            
-            <script>
+						</div>
+						<!-- End Customers Card -->
+
+						<script>
 				document.addEventListener("DOMContentLoaded", () => {
 				  const cusData = {
-				    today: <%=list.get(5) %>,
-				    month: <%=list.get(4) %>,
-				    year: <%=list.get(3) %>
+				    today: <%=list.get(5)%>,
+				    month: <%=list.get(4)%>,
+				    year: <%=list.get(3)%>
 				  };
 				
 				  const cusValueElement = document.querySelector(".customers-card .dl_2");
@@ -225,355 +254,264 @@
 				});
 			</script>
 
-            <!-- Reports -->
-            <div class="col-12">
-              <div class="card">
+						<!-- Reports -->
+						<div class="col-12">
+							<div class="card">
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
+								<div class="filter">
+									<a class="icon" href="<%=request.getContextPath()%>/booking_report"><i class="bi bi-eye"></i></a>
+<!-- 									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"> -->
+<!-- 										<li class="dropdown-header text-start"> -->
+<!-- 											<h6>Filter</h6> -->
+<!-- 										</li> -->
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
-                  </ul>
-                </div>
+<!-- 										<li><a class="dropdown-item" href="#">Hôm nay</a></li> -->
+<!-- 										<li><a class="dropdown-item" href="#">Tháng này</a></li> -->
+<!-- 										<li><a class="dropdown-item" href="#">Năm nay</a></li> -->
+<!-- 									</ul> -->
+								</div>
 
-                <div class="card-body">
-                  <h5 class="card-title">Báo cáo <span>/  Tuần này</span></h5>
+								<div class="card-body">
+									<h5 class="card-title">
+										Báo cáo <span>/ Tuần này</span>
+									</h5>
+									<!-- Bar Chart -->
+									<canvas id="reportsChart" style="max-height: 400px;"></canvas>
+								</div>
 
-                  <!-- Line Chart -->
-                  <div id="reportsChart"></div>
+							</div>
+						</div>
+						<!-- End Reports -->
 
-                  <script>
-                    document.addEventListener("DOMContentLoaded", () => {
-                      new ApexCharts(document.querySelector("#reportsChart"), {
-                        series: [{
-                          name: 'Tầng 1',
-                          data: [5, 4, 7, 6, 8, 10, 6],
-                        }, {
-                          name: 'Tầng 2',
-                          data: [6, 9, 5, 3, 4, 13, 7]
-                        }, {
-                          name: 'Tầng 3',
-                          data: [4, 8, 9, 12, 15, 16, 17]
-                        }
-                        , {
-                          name: 'Tầng 4',
-                          data: [1, 3, 4, 5, 2, 10, 13]
-                        }
-                        , {
-                          name: 'Tầng 5',
-                          data: [6, 7, 5, 3, 2, 4, 8]
-                        }
-                        ],
-                        chart: {
-                          height: 350,
-                          type: 'area',
-                          toolbar: {
-                            show: false
-                          },
-                        },
-                        markers: {
-                          size: 4
-                        },
-                        colors: ['#4154f1', '#2eca6a', '#ff771d', '#ff4560', '#00d9e0'],
-                        fill: {
-                          type: "gradient",
-                          gradient: {
-                            shadeIntensity: 1,
-                            opacityFrom: 0.3,
-                            opacityTo: 0.4,
-                            stops: [0, 90, 100]
-                          }
-                        },
-                        dataLabels: {
-                          enabled: false
-                        },
-                        stroke: {
-                          curve: 'smooth',
-                          width: 2
-                        },
-                        xaxis: {
-                          type: 'datetime',
-                          categories: ["2024-09-19T00:00:00.000Z", "2024-09-20T00:00:00.000Z", "2024-09-21T00:00:00.000Z", "2024-09-22T00:00:00.000Z", "2024-09-23T00:00:00.000Z", "2024-09-24T00:00:00.000Z", "2024-09-25T00:00:00.000Z"]
-                        },
-                        tooltip: {
-                          x: {
-                            format: 'dd/MM/yy HH:mm'
-                          },
-                        }
-                      }).render();
-                    });
-                  </script>
-                  <!-- End Line Chart -->
+						<!-- Recent Sales -->
+						<div class="col-12">
+							<div class="card recent-sales overflow-auto">
 
-                </div>
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i
+										class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Lọc</h6>
+										</li>
 
-              </div>
-            </div><!-- End Reports -->
+										<li><a class="dropdown-item" href="#">Hôm nay</a></li>
+										<li><a class="dropdown-item" href="#">Tháng này</a></li>
+										<li><a class="dropdown-item" href="#">Năm nay</a></li>
+									</ul>
+								</div>
 
-            <!-- Recent Sales -->
-            <div class="col-12">
-              <div class="card recent-sales overflow-auto">
+								<div class="card-body">
+									<h5 class="card-title">
+										Gần đây <span>| Hôm nay</span>
+									</h5>
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Lọc</h6>
-                    </li>
+									<table class="table table-borderless datatable">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Khách hàng</th>
+												<th scope="col">Phòng</th>
+												<th scope="col">Giá</th>
+												<th scope="col">Trạng thái</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<th scope="row"><a href="#">#2457</a></th>
+												<td>Nguyễn Thị Thu</td>
+												<td><a href="#" class="text-primary">P101</a></td>
+												<td>1.4000.000đ</td>
+												<td><span class="badge bg-success">Approved</span></td>
+											</tr>
+										</tbody>
+									</table>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
-                  </ul>
-                </div>
+								</div>
 
-                <div class="card-body">
-                  <h5 class="card-title">Gần đây <span>| Hôm nay</span></h5>
+							</div>
+						</div>
+						<!-- End Recent Sales -->
 
-                  <table class="table table-borderless datatable">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Khách hàng</th>
-                        <th scope="col">Phòng</th>
-                        <th scope="col">Giá</th>
-                        <th scope="col">Trạng thái</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#">#2457</a></th>
-                        <td>Nguyễn Thị Thu</td>
-                        <td><a href="#" class="text-primary">P101</a></td>
-                        <td>1.4000.000đ</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
+						<!-- Top Selling -->
+						<div class="col-12">
+							<div class="card top-selling overflow-auto">
 
-                </div>
+								<div class="filter">
+									<a class="icon" href="#" data-bs-toggle="dropdown"><i
+										class="bi bi-three-dots"></i></a>
+									<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+										<li class="dropdown-header text-start">
+											<h6>Lọc</h6>
+										</li>
 
-              </div>
-            </div><!-- End Recent Sales -->
+										<li><a class="dropdown-item" href="#">Hôm nay</a></li>
+										<li><a class="dropdown-item" href="#">Tháng này</a></li>
+										<li><a class="dropdown-item" href="#">Năm nay</a></li>
+									</ul>
+								</div>
 
-            <!-- Top Selling -->
-            <div class="col-12">
-              <div class="card top-selling overflow-auto">
+								<div class="card-body pb-0">
+									<h5 class="card-title">
+										Phòng phổ biến <span>| Hôm nay</span>
+									</h5>
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Lọc</h6>
-                    </li>
+									<table class="table table-borderless">
+										<thead>
+											<tr>
+												<th scope="col">Tên</th>
+												<th scope="col">Giá</th>
+												<th scope="col">Số lượt</th>
+												<th scope="col">Doanh thu</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><a href="#" class="text-primary fw-bold">P101</a></td>
+												<td>1.400.000đ</td>
+												<td class="fw-bold">1</td>
+												<td>1.400.000đ</td>
+											</tr>
+										</tbody>
+									</table>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
-                  </ul>
-                </div>
+								</div>
 
-                <div class="card-body pb-0">
-                  <h5 class="card-title">Phòng phổ biến <span>| Hôm nay</span></h5>
+							</div>
+						</div>
+						<!-- End Top Selling -->
 
-                  <table class="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Tên</th>
-                        <th scope="col">Giá</th>
-                        <th scope="col">Số lượt</th>
-                        <th scope="col">Doanh thu</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><a href="#" class="text-primary fw-bold">P101</a></td>
-                        <td>1.400.000đ</td>
-                        <td class="fw-bold">1</td>
-                        <td>1.400.000đ</td>
-                      </tr>
-                    </tbody>
-                  </table>
+					</div>
+				</div>
+				<!-- End Left side columns -->
 
-                </div>
+				<!-- Right side columns -->
+				<div class="col-lg-4">
 
-              </div>
-            </div><!-- End Top Selling -->
+					<!-- Recent Activity -->
+					<div class="card">
+						<div class="filter">
+							<a class="icon" href="#" data-bs-toggle="dropdown"><i
+								class="bi bi-three-dots"></i></a>
+							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+								<li class="dropdown-header text-start">
+									<h6>Filter</h6>
+								</li>
 
-          </div>
-        </div><!-- End Left side columns -->
+								<li><a class="dropdown-item" href="#">Hôm nay</a></li>
+								<li><a class="dropdown-item" href="#">Tháng này</a></li>
+								<li><a class="dropdown-item" href="#">Năm nay</a></li>
+							</ul>
+						</div>
 
-        <!-- Right side columns -->
-        <div class="col-lg-4">
+						<div class="card-body">
+							<h5 class="card-title">
+								Hoạt động gần đây <span>| Hôm nay</span>
+							</h5>
 
-          <!-- Recent Activity -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
+							<div class="activity">
 
-                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                <li><a class="dropdown-item" href="#">Năm nay</a></li>
-              </ul>
-            </div>
+								<div class="activity-item d-flex">
+									<div class="activite-label">32 min</div>
+									<i
+										class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+									<div class="activity-content">Khách hàng Nguyễn Thu đặt
+										phòng 101</div>
+								</div>
+								<!-- End activity item-->
 
-            <div class="card-body">
-              <h5 class="card-title">Hoạt động gần đây <span>| Hôm nay</span></h5>
+								<div class="activity-item d-flex">
+									<div class="activite-label">56 min</div>
+									<i
+										class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+									<div class="activity-content">Khách hàng Nguyễn Thu đặt
+										phòng 101</div>
+								</div>
+								<!-- End activity item-->
 
-              <div class="activity">
+								<div class="activity-item d-flex">
+									<div class="activite-label">2 hrs</div>
+									<i
+										class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+									<div class="activity-content">Khách hàng Nguyễn Thu đặt
+										phòng 101</div>
+								</div>
+								<!-- End activity item-->
 
-                <div class="activity-item d-flex">
-                  <div class="activite-label">32 min</div>
-                  <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                  <div class="activity-content">
-                    Khách hàng Nguyễn Thu đặt phòng 101
-                  </div>
-                </div><!-- End activity item-->
+								<div class="activity-item d-flex">
+									<div class="activite-label">1 day</div>
+									<i
+										class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+									<div class="activity-content">Khách hàng Nguyễn Thu đặt
+										phòng 101</div>
+								</div>
+								<!-- End activity item-->
 
-                <div class="activity-item d-flex">
-                  <div class="activite-label">56 min</div>
-                  <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                  <div class="activity-content">
-                    Khách hàng Nguyễn Thu đặt phòng 101
-                  </div>
-                </div><!-- End activity item-->
+								<div class="activity-item d-flex">
+									<div class="activite-label">2 days</div>
+									<i
+										class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+									<div class="activity-content">Khách hàng Nguyễn Thu đặt
+										phòng 101</div>
+								</div>
+								<!-- End activity item-->
 
-                <div class="activity-item d-flex">
-                  <div class="activite-label">2 hrs</div>
-                  <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                  <div class="activity-content">
-                    Khách hàng Nguyễn Thu đặt phòng 101
-                  </div>
-                </div><!-- End activity item-->
+								<div class="activity-item d-flex">
+									<div class="activite-label">4 weeks</div>
+									<i
+										class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
+									<div class="activity-content">Khách hàng Nguyễn Thu đặt
+										phòng 101</div>
+								</div>
+								<!-- End activity item-->
 
-                <div class="activity-item d-flex">
-                  <div class="activite-label">1 day</div>
-                  <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                  <div class="activity-content">
-                    Khách hàng Nguyễn Thu đặt phòng 101
-                  </div>
-                </div><!-- End activity item-->
+							</div>
 
-                <div class="activity-item d-flex">
-                  <div class="activite-label">2 days</div>
-                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                  <div class="activity-content">
-                    Khách hàng Nguyễn Thu đặt phòng 101                  </div>
-                </div><!-- End activity item-->
+						</div>
+					</div>
+					<!-- End Recent Activity -->
 
-                <div class="activity-item d-flex">
-                  <div class="activite-label">4 weeks</div>
-                  <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                  <div class="activity-content">
-                    Khách hàng Nguyễn Thu đặt phòng 101                  </div>
-                </div><!-- End activity item-->
+					<!-- Budget Report -->
+					<div class="card">
+						<div class="filter">
+							<a class="icon" href="<%=request.getContextPath()%>/revenue_report"><i class="bi bi-eye"></i></a>
+						</div>
 
-              </div>
+						<div class="card-body pb-0">
+							<h5 class="card-title">
+								Báo cáo doanh thu <span>| Tháng này</span>
+							</h5>
+							<!-- Budget Chart -->
+							<canvas id="budgetChart" style="min-height: 400px;"></canvas>
+						</div>
+					</div>
+					<!-- End Budget Report -->
 
-            </div>
-          </div><!-- End Recent Activity -->
+					<!-- Website Traffic -->
+					<div class="card">
+						<div class="filter">
+							<a class="icon" href="<%=request.getContextPath()%>/booking_report"><i
+								class="bi bi-eye"></i></a>
+<!-- 							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow"> -->
+<!-- 								<li class="dropdown-header text-start"> -->
+<!-- 									<h6>Filter</h6> -->
+<!-- 								</li> -->
 
-          <!-- Budget Report -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Lọc</h6>
-                </li>
+<!-- 								<li><a class="dropdown-item" href="#">Hôm nay</a></li> -->
+<!-- 								<li><a class="dropdown-item" href="#">Tháng này</a></li> -->
+<!-- 								<li><a class="dropdown-item" href="#">Năm nay</a></li> -->
+<!-- 							</ul> -->
+						</div>
 
-                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                <li><a class="dropdown-item" href="#">Năm nay</a></li>
-              </ul>
-            </div>
+						<div class="card-body pb-0">
+							<h5 class="card-title">
+								Tỉ lệ đặt phòng <span>| Tuần này</span>
+							</h5>
 
-            <div class="card-body pb-0">
-              <h5 class="card-title">Báo cáo doanh thu <span>| Tháng này</span></h5>
+							<div id="trafficChart" style="min-height: 400px;" class="echart"></div>
 
-              <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
-                    legend: {
-                      data: ['Plan', 'Real']
-                    },
-                    radar: {
-                      // shape: 'circle',
-                      indicator: [{
-                        name: '1st Floor',
-                        max: 6500
-                      },
-                      {
-                        name: '2nd Floor',
-                        max: 16000
-                      },
-                      {
-                        name: '3rd Floor',
-                        max: 30000
-                      },
-                      {
-                        name: '4th Floor',
-                        max: 38000
-                      },
-                      {
-                        name: '5th Floor',
-                        max: 52000
-                      },
-                      ]
-                    },
-                    series: [{
-                      name: 'Budget vs spending',
-                      type: 'radar',
-                      data: [{
-                        value: [4200, 3000, 20000, 35000, 50000, 18000],
-                        name: 'Plan'
-                      },
-                      {
-                        value: [5000, 14000, 28000, 26000, 42000, 21000],
-                        name: 'Real'
-                      }
-                      ]
-                    }]
-                  });
-                });
-              </script>
-
-            </div>
-          </div><!-- End Budget Report -->
-
-          <!-- Website Traffic -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                <li><a class="dropdown-item" href="#">Năm nay</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">Thời điểm đặt phòng <span>| Hôm nay</span></h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
+				<%ArrayList<Integer> list_ty_le = (ArrayList<Integer>) request.getAttribute("list_ty_le"); %>
+			<script>
                 document.addEventListener("DOMContentLoaded", () => {
                   echarts.init(document.querySelector("#trafficChart")).setOption({
                     tooltip: {
@@ -584,7 +522,7 @@
                       left: 'center'
                     },
                     series: [{
-                      name: 'Access From',
+                      name: 'lượt',
                       type: 'pie',
                       radius: ['40%', '70%'],
                       avoidLabelOverlap: false,
@@ -603,90 +541,286 @@
                         show: false
                       },
                       data: [{
-                        value: 1048,
-                        name: '5h - 12h'
+                        value: <%= list_ty_le.get(0) %>,
+                        name: 'Tầng 1'
                       },
                       {
-                        value: 735,
-                        name: '12h - 17h'
+                        value: <%= list_ty_le.get(1) %>,
+                        name: 'Tầng 2'
                       },
                       {
-                        value: 580,
-                        name: '17h - 22h'
+                        value: <%= list_ty_le.get(2) %>,
+                        name: 'Tầng 3'
                       },
                       {
-                        value: 484,
-                        name: '22h - 5h'
-                      }
+                        value: <%= list_ty_le.get(3) %>,
+                        name: 'Tầng 4'
+                      },
+                      {
+                          value: <%= list_ty_le.get(4) %>,
+                          name: 'Tầng 5'
+                       }
                       ]
                     }]
                   });
                 });
               </script>
 
-            </div>
-          </div><!-- End Website Traffic -->
+						</div>
+					</div>
+					<!-- End Website Traffic -->
 
-          <!-- News & Updates Traffic -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
+					<!-- News & Updates Traffic -->
+					<div class="card">
+						<div class="filter">
+							<a class="icon" href="#" data-bs-toggle="dropdown"><i
+								class="bi bi-three-dots"></i></a>
+							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+								<li class="dropdown-header text-start">
+									<h6>Filter</h6>
+								</li>
 
-                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                <li><a class="dropdown-item" href="#">Năm nay</a></li>
-              </ul>
-            </div>
+								<li><a class="dropdown-item" href="#">Hôm nay</a></li>
+								<li><a class="dropdown-item" href="#">Tháng này</a></li>
+								<li><a class="dropdown-item" href="#">Năm nay</a></li>
+							</ul>
+						</div>
 
-            <div class="card-body pb-0">
-              <h5 class="card-title">Tin tức &amp; Cập nhật <span>| Hôm nay</span></h5>
+						<div class="card-body pb-0">
+							<h5 class="card-title">
+								Tin tức &amp; Cập nhật <span>| Hôm nay</span>
+							</h5>
 
-              <div class="news">
-                <div class="post-item clearfix">
-                  <img src="adimg/news-1.jpg" alt="">
-                  <h4><a href="#">Phòng 101 trang bị thêm TV OLED</a></h4>
-                  <p>Tăng trải nghiệm cho khách hàng</p>
-                </div>
+							<div class="news">
+								<div class="post-item clearfix">
+									<img src="adimg/news-1.jpg" alt="">
+									<h4>
+										<a href="#">Phòng 101 trang bị thêm TV OLED</a>
+									</h4>
+									<p>Tăng trải nghiệm cho khách hàng</p>
+								</div>
 
-                <div class="post-item clearfix">
-                  <img src="adimg/news-2.jpg" alt="">
-                  <h4><a href="#">Phòng 101 trang bị thêm TV OLED</a></h4>
-                  <p>Tăng trải nghiệm cho khách hàng</p>
-                </div>
+								<div class="post-item clearfix">
+									<img src="adimg/news-2.jpg" alt="">
+									<h4>
+										<a href="#">Phòng 101 trang bị thêm TV OLED</a>
+									</h4>
+									<p>Tăng trải nghiệm cho khách hàng</p>
+								</div>
 
-                <div class="post-item clearfix">
-                  <img src="adimg/news-3.jpg" alt="">
-                  <h4><a href="#">Phòng 101 trang bị thêm TV OLED</a></h4>
-                  <p>Tăng trải nghiệm cho khách hàng</p>
-                </div>
+								<div class="post-item clearfix">
+									<img src="adimg/news-3.jpg" alt="">
+									<h4>
+										<a href="#">Phòng 101 trang bị thêm TV OLED</a>
+									</h4>
+									<p>Tăng trải nghiệm cho khách hàng</p>
+								</div>
 
-                <div class="post-item clearfix">
-                  <img src="adimg/news-4.jpg" alt="">
-                  <h4><a href="#">Phòng 101 trang bị thêm TV OLED</a></h4>
-                  <p>Tăng trải nghiệm cho khách hàng</p>
-                </div>
+								<div class="post-item clearfix">
+									<img src="adimg/news-4.jpg" alt="">
+									<h4>
+										<a href="#">Phòng 101 trang bị thêm TV OLED</a>
+									</h4>
+									<p>Tăng trải nghiệm cho khách hàng</p>
+								</div>
 
-                <div class="post-item clearfix">
-                  <img src="adimg/news-5.jpg" alt="">
-                  <h4><a href="#">Phòng 101 trang bị thêm TV OLED</a></h4>
-                  <p>Tăng trải nghiệm cho khách hàng</p>
-                </div>
+								<div class="post-item clearfix">
+									<img src="adimg/news-5.jpg" alt="">
+									<h4>
+										<a href="#">Phòng 101 trang bị thêm TV OLED</a>
+									</h4>
+									<p>Tăng trải nghiệm cho khách hàng</p>
+								</div>
 
-              </div><!-- End sidebar recent posts-->
+							</div>
+							<!-- End sidebar recent posts-->
 
-            </div>
-          </div><!-- End News & Updates -->
+						</div>
+					</div>
+					<!-- End News & Updates -->
 
-        </div><!-- End Right side columns -->
+				</div>
+				<!-- End Right side columns -->
 
-      </div>
-    </section>
+			</div>
+		</section>
 
-  </main><!-- End #main -->
+	</main>
+	<!-- End #main -->
+
+	<%ArrayList<booking_report> list_tuan = (ArrayList<booking_report>)request.getAttribute("list_tuan");%>
+
+	<!-- Script -->
+	<script>
+	  document.addEventListener("DOMContentLoaded", () => {		
+		  <%
+			  StringBuilder labelsBuilder = new StringBuilder();
+			  StringBuilder dataBkBuilder = new StringBuilder();
+			  for (int i = 0; i < list.size(); i++) {
+			    booking_report br = list_tuan.get(i);
+			    String label = formatDateId(String.valueOf(br.getBr_id()));
+			    labelsBuilder.append("\"").append(label).append("\"");
+			    dataBkBuilder.append(br.getBr_amount());
+			    if (i < list.size() - 1) {
+			      labelsBuilder.append(",");
+			      dataBkBuilder.append(",");
+			    }
+			  }
+		%>
+		
+		const labels = [<%= labelsBuilder.toString() %>];
+		const data_bk = [<%= dataBkBuilder.toString() %>];
+	
+	    const data = {
+	      labels: labels,
+	      datasets: [{
+	        label: 'Số lượt đặt phòng',
+	        data: data_bk,
+	        backgroundColor: [
+	        	  'rgba(255, 99, 132, 0.2)',    // red
+	        	  'rgba(255, 159, 64, 0.2)',    // orange
+	        	  'rgba(255, 205, 86, 0.2)',    // yellow
+	        	  'rgba(75, 192, 192, 0.2)',    // teal
+	        	  'rgba(54, 162, 235, 0.2)',    // blue
+	        	  'rgba(153, 102, 255, 0.2)',   // purple
+	        	  'rgba(201, 203, 207, 0.2)',   // grey
+	        	  'rgba(255, 99, 255, 0.2)',    // pink
+	        	  'rgba(0, 255, 127, 0.2)',     // spring green
+	        	  'rgba(255, 140, 0, 0.2)',     // dark orange
+	        	  'rgba(64, 224, 208, 0.2)',    // turquoise
+	        	  'rgba(128, 0, 128, 0.2)',     // indigo
+	        	  'rgba(210, 105, 30, 0.2)',    // chocolate
+	        	  'rgba(70, 130, 180, 0.2)',    // steel blue
+	        	  'rgba(46, 139, 87, 0.2)',     // sea green
+	        	  'rgba(255, 20, 147, 0.2)',    // deep pink
+	        	  'rgba(255, 215, 0, 0.2)',     // gold
+	        	  'rgba(123, 104, 238, 0.2)',   // medium slate blue
+	        	  'rgba(0, 191, 255, 0.2)',     // deep sky blue
+	        	  'rgba(244, 164, 96, 0.2)'     // sandy brown
+	        	],
+	        	borderColor: [
+	        	  'rgb(255, 99, 132)',
+	        	  'rgb(255, 159, 64)',
+	        	  'rgb(255, 205, 86)',
+	        	  'rgb(75, 192, 192)',
+	        	  'rgb(54, 162, 235)',
+	        	  'rgb(153, 102, 255)',
+	        	  'rgb(201, 203, 207)',
+	        	  'rgb(255, 99, 255)',
+	        	  'rgb(0, 255, 127)',
+	        	  'rgb(255, 140, 0)',
+	        	  'rgb(64, 224, 208)',
+	        	  'rgb(128, 0, 128)',
+	        	  'rgb(210, 105, 30)',
+	        	  'rgb(70, 130, 180)',
+	        	  'rgb(46, 139, 87)',
+	        	  'rgb(255, 20, 147)',
+	        	  'rgb(255, 215, 0)',
+	        	  'rgb(123, 104, 238)',
+	        	  'rgb(0, 191, 255)',
+	        	  'rgb(244, 164, 96)'
+	        	],
+	        borderWidth: 1
+	      }]
+	    };
+	
+	    const config = {
+	      type: 'bar',
+	      data: data,
+	      options: {
+	        responsive: true,
+	        maintainAspectRatio: false,
+	        scales: {
+	          y: {
+	            beginAtZero: true
+	          }
+	        }
+	      }
+	    };
+	
+	    const ctx = document.getElementById("reportsChart").getContext("2d");
+	    new Chart(ctx, config);
+	  });
+	</script>
+
+	<!-- Script -->
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {					
+			const data = {
+				labels: [
+					'Phòng',
+					'Thức ăn',
+					'Dịch vụ',
+					'Làm đẹp',
+					'Thể thao'],
+		  		datasets: [
+			  		{
+				    label: 'Hôm qua',
+						data: [<%= list2.get(0)%>, <%= list2.get(1)%>, <%= list2.get(2)%>, <%= list2.get(3)%>, <%= list2.get(4)%>],
+						fill: true,
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgb(255, 99, 132)',
+						pointBackgroundColor: 'rgb(255, 99, 132)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(255, 99, 132)'
+					 },
+					  
+					{
+					label: 'Hôm nay',
+						data: [<%= list2.get(5)%>, <%= list2.get(6)%>, <%= list2.get(7)%>, <%= list2.get(8)%>, <%= list2.get(9)%>],
+						fill: true,
+						backgroundColor: 'rgba(54, 162, 235, 0.2)',
+						borderColor: 'rgb(54, 162, 235)',
+						pointBackgroundColor: 'rgb(54, 162, 235)',
+						pointBorderColor: '#fff',
+						pointHoverBackgroundColor: '#fff',
+						pointHoverBorderColor: 'rgb(54, 162, 235)'}]
+					};
+					
+					const config_1 = {
+					    type: 'radar',
+					    data: data,
+					    options: {
+					    	elements: {
+					    	line: {
+					    	 borderWidth: 3
+					    			}
+					    		}
+					    	},
+					    };
+					
+					    const ctx_1 = document.getElementById("budgetChart").getContext("2d");
+					    new Chart(ctx_1, config_1);
+					  });
+	</script>
+<%! 
+	public String formatDateId(String id) {
+	    if (id == null || id.length() < 4) return "ID không hợp lệ";
+	
+	    try {
+	        if (id.length() == 4) {   //20250517
+	            // Năm
+	            return "Năm " + id;
+	        } else if (id.length() == 6) {
+	            // Tháng + Năm (yyyyMM)
+	            String year = id.substring(0, 4);
+	            String month = id.substring(4, 6);
+	            return "Tháng " + Integer.parseInt(month) + "/" + year;
+	        } else if (id.length() == 8) {
+	            // Ngày + Tháng + Năm (yyyyMMdd)
+	            String year = id.substring(0, 4);
+	            String month = id.substring(4, 6);
+	            String day = id.substring(6, 8);
+	            return Integer.parseInt(day) + "/" + Integer.parseInt(month) + "/" + year;
+	        } else {
+	            return "Định dạng ID không hỗ trợ";
+	        }
+	    } catch (Exception e) {
+	        return "Lỗi định dạng ID";
+	    }
+	}
+	%>
 </body>
 <%@include file="/adjsp/lib/footer.jsp"%>
 

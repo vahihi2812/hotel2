@@ -3,13 +3,16 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.role;
-import util.JDBCUtil;
+import util.ConnectionPoolImpl;
 
 public class roleDAO implements daoInterface<role> {
 
+	private Connection con;
+	
     public static roleDAO getIns() {
         return new roleDAO();
     }
@@ -19,14 +22,21 @@ public class roleDAO implements daoInterface<role> {
         int kq = 0;
         try {
             String sql = "INSERT INTO role(role_name, role_description) VALUES (?, ?)";
-            Connection con = JDBCUtil.getConn();
+            
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, t.getRole_name());
             ps.setString(2, t.getRole_description());
             kq = ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("insert " + e);
-        }
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "role");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
         return kq;
     }
 
@@ -35,7 +45,7 @@ public class roleDAO implements daoInterface<role> {
         int kq = 0;
         try {
             String sql = "UPDATE role SET role_name = ?, role_description = ? WHERE role_id = ?";
-            Connection con = JDBCUtil.getConn();
+            
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, t.getRole_name());
             ps.setString(2, t.getRole_description());
@@ -43,7 +53,14 @@ public class roleDAO implements daoInterface<role> {
             kq = ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("update " + e);
-        }
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "role");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
         return kq;
     }
 
@@ -52,13 +69,20 @@ public class roleDAO implements daoInterface<role> {
         int kq = 0;
         try {
             String sql = "DELETE FROM role WHERE role_id = ?";
-            Connection con = JDBCUtil.getConn();
+            
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, t.getRole_id());
             kq = ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("delete " + e);
-        }
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "role");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
         return kq;
     }
 
@@ -67,7 +91,7 @@ public class roleDAO implements daoInterface<role> {
         ArrayList<role> list = new ArrayList<>();
         try {
             String sql = "SELECT * FROM role";
-            Connection con = JDBCUtil.getConn();
+            
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -79,7 +103,14 @@ public class roleDAO implements daoInterface<role> {
             }
         } catch (Exception e) {
             System.out.println("selectAll " + e);
-        }
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "role");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
         return list;
     }
 
@@ -88,7 +119,7 @@ public class roleDAO implements daoInterface<role> {
         role r = null;
         try {
             String sql = "SELECT * FROM role WHERE role_id = ?";
-            Connection con = JDBCUtil.getConn();
+            
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -100,7 +131,14 @@ public class roleDAO implements daoInterface<role> {
             }
         } catch (Exception e) {
             System.out.println("selectById " + e);
-        }
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "role");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
         return r;
     }
 
@@ -109,7 +147,7 @@ public class roleDAO implements daoInterface<role> {
         ArrayList<role> list = new ArrayList<>();
         try {
             String sql = "SELECT * FROM role WHERE " + condition;
-            Connection con = JDBCUtil.getConn();
+            
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -121,7 +159,14 @@ public class roleDAO implements daoInterface<role> {
             }
         } catch (Exception e) {
             System.out.println("selectByCondition " + e);
-        }
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "role");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
         return list;
     }
 }
