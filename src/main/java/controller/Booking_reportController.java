@@ -38,7 +38,9 @@ public class Booking_reportController extends HttpServlet {
 	private ArrayList<booking_report> list;
 	private ArrayList<Integer> list_tong_cong;
 	private String img_path = "E:/noimg.png";
-	private String pdf_path;
+	private static String pdf_path = "E:\\pdfmau.pdf";
+	private static String csv_path = "E:\\danhsach.csv";
+	private static String xlsx_path = "E:\\test.xlsx";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -153,9 +155,9 @@ public class Booking_reportController extends HttpServlet {
 	private void in_file_pdf() {
 		try {
 
-			this.pdf_path = "E:\\my_booking_report_" + System.currentTimeMillis() + ".pdf";
+			pdf_path = "E:\\my_booking_report_" + System.currentTimeMillis() + ".pdf";
 
-			PdfWriter writer = new PdfWriter(this.pdf_path);
+			PdfWriter writer = new PdfWriter(pdf_path);
 			PdfDocument pdfdocument = new PdfDocument(writer);
 			Document document = new Document(pdfdocument);
 
@@ -317,5 +319,17 @@ public class Booking_reportController extends HttpServlet {
 		}
 		
 		return list;
+	}
+	
+	public static String getPDFPath() {
+		return pdf_path;
+	}
+	
+	public static String getXLSXPath() {
+		return xlsx_path;
+	}
+	
+	public static String getCSVPath() {
+		return csv_path;
 	}
 }

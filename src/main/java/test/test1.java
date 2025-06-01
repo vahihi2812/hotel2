@@ -1,28 +1,44 @@
 package test;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import dao.accountDAO;
-import model.account;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import dao.booking_reportDAO;
+import model.booking_report;
 
 public class test1 {
 	public static void main(String[] args) {
-		account acc1 = new account();
-		acc1.setAccount_username("toitest1");
-		acc1.setAccount_password("toitest1");
-		acc1.setRole_id(2);
-		
-		account acc2 = new account();
-		acc2.setAccount_username("toitest2");
-		acc2.setAccount_password("toitest2");
-		acc2.setRole_id(2);
-	
-		ArrayList<account> list = new ArrayList<>();
-		list.add(acc1);
-		list.add(acc2);
-		
-		//System.out.println(list.get(0).getAccount_username());
-		
-		System.out.println(accountDAO.getIns().insertIgnore(list));
+		// Excel
+		ArrayList<booking_report> list = booking_reportDAO.getInstance().selectBetween(2022, 2025);
+
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("Danh sách");
+
+		int rowIndex = 0;
+		for (booking_report br : list) {
+			Row row = sheet.createRow(rowIndex++);
+			row.createCell(0).setCellValue(br.getBr_id());
+			row.createCell(1).setCellValue(br.getBr_amount());
+		}
+
+		try {
+			FileOutputStream fileOut = new FileOutputStream("E:\\danhsach.csv");
+			workbook.write(fileOut);
+			System.out.println("Ghi Excel thành công!");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -656,12 +656,12 @@
 		  <%
 			  StringBuilder labelsBuilder = new StringBuilder();
 			  StringBuilder dataBkBuilder = new StringBuilder();
-			  for (int i = 0; i < list.size(); i++) {
+			  for (int i = 0; i < list_tuan.size(); i++) {
 			    booking_report br = list_tuan.get(i);
 			    String label = formatDateId(String.valueOf(br.getBr_id()));
 			    labelsBuilder.append("\"").append(label).append("\"");
 			    dataBkBuilder.append(br.getBr_amount());
-			    if (i < list.size() - 1) {
+			    if (i < list_tuan.size() - 1) {
 			      labelsBuilder.append(",");
 			      dataBkBuilder.append(",");
 			    }

@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,54 +33,57 @@ public class HomeController extends HttpServlet {
 
 		int id_1 = year * 100 + month;
 		int id_2 = year * 10000 + month * 100 + day;
+		id_2 = 20250601;
 
 		req.setAttribute("total_list", getTotalList(year, id_1, id_2));
 		req.setAttribute("list1", getRevList(year, id_1, id_2));
 
+		System.out.println(id_2);
+		
 		ArrayList<booking_report> list_tuan = getListBookingTuan(id_2);
 		req.setAttribute("list_tuan", list_tuan);
 
 		req.setAttribute("list_ty_le", getListTyLe(list_tuan));
-		
+
 		req.setAttribute("list_ss", getListSoSanh(year, month, day));
 
 		req.getRequestDispatcher("/adjsp/index.jsp").forward(req, resp);
 	}
-	
-	private ArrayList<Double> getListSoSanh(int year, int month, int day){
+
+	private ArrayList<Double> getListSoSanh(int year, int month, int day) {
 		ArrayList<Double> list = new ArrayList<>();
 		ArrayList<revenue_report> list_1 = null;
 		int id_1 = year * 10000 + month * 100 + day;
-		
+
 		revenue_report rr_hom_qua = null;
 		revenue_report rr_hom_nay = revenue_reportDAO.getInstance().selectById(id_1);
-		
-		if(day == 1) {
-			if(month == 1) {
+
+		if (day == 1) {
+			if (month == 1) {
 				year -= 1;
 				month = 12;
-			}
-			else{
+			} else {
 				month -= 1;
 			}
-			list_1 = revenue_reportDAO.getInstance().selectBetween(year * 10000 + month * 100 + 28, year * 10000 + month * 100 + 31);
+			list_1 = revenue_reportDAO.getInstance().selectBetween(year * 10000 + month * 100 + 28,
+					year * 10000 + month * 100 + 31);
 			rr_hom_qua = list_1.get(list_1.size() - 1);
-		}else {
+		} else {
 			rr_hom_qua = revenue_reportDAO.getInstance().selectById(id_1 - 1);
-		}		
-		
+		}
+
 		list.add(rr_hom_qua.getRr_room());
 		list.add(rr_hom_qua.getRr_food());
 		list.add(rr_hom_qua.getRr_service());
 		list.add(rr_hom_qua.getRr_spa());
 		list.add(rr_hom_qua.getRr_sport());
-		
+
 		list.add(rr_hom_nay.getRr_room());
 		list.add(rr_hom_nay.getRr_food());
 		list.add(rr_hom_nay.getRr_service());
 		list.add(rr_hom_nay.getRr_spa());
 		list.add(rr_hom_nay.getRr_sport());
-		
+
 		return list;
 	}
 
@@ -106,7 +110,10 @@ public class HomeController extends HttpServlet {
 	private ArrayList<booking_report> getListBookingTuan(int id_2) {
 		// bieu do theo tuan
 		ArrayList<booking_report> list_tuan = new ArrayList<>();
-		list_tuan = booking_reportDAO.getInstance().selectBetween(id_2 - 6, id_2);
+		
+		list_tuan = booking_reportDAO.getInstance().selectBetweenDescLIMIT(id_2 - 100, id_2, 7);
+		Collections.reverse(list_tuan);
+
 		return list_tuan;
 	}
 

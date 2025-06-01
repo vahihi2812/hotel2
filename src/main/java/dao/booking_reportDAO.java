@@ -214,4 +214,38 @@ public class booking_reportDAO implements daoInterface<booking_report> {
 		}
         return list;
     }
+    
+    public ArrayList<booking_report> selectBetweenDescLIMIT(int s, int e, int limit) {
+        ArrayList<booking_report> list = null;
+        try {
+        	list = new ArrayList<>();
+            String sql = "SELECT * FROM booking_report WHERE br_id between ? and ? ORDER BY br_id DESC LIMIT ?"; 
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, s);
+            ps.setInt(2, e);
+            ps.setInt(3, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                booking_report br = new booking_report();
+                br.setBr_id(rs.getInt("br_id"));
+                br.setBr_amount(rs.getInt("br_amount"));
+                br.setBr_floor_1(rs.getInt("br_floor_1"));
+                br.setBr_floor_2(rs.getInt("br_floor_2"));
+                br.setBr_floor_3(rs.getInt("br_floor_3"));
+                br.setBr_floor_4(rs.getInt("br_floor_4"));
+                br.setBr_floor_5(rs.getInt("br_floor_5"));
+                list.add(br);
+            }
+        } catch (Exception ex) {
+            System.out.println("select Between DESC booking_report " + ex);
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "booking_report");
+			} catch (SQLException ex) {
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			}
+		}
+        return list;
+    }
 }

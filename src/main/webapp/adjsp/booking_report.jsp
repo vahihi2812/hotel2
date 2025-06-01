@@ -110,13 +110,6 @@
 	                            </div>
 	                        </form>
 	
-	                        <script>
-	                            const today = new Date().toISOString().split('T')[0];
-	                            document.querySelectorAll('input[type="date"]').forEach(function(input) {
-	                                input.max = today;
-	                            });
-	                        </script>
-	
 	                        <!-- Biểu đồ thống kê -->
 	                        <h5 class="card-title">Biểu đồ số lượt đặt phòng</h5>
 	                        <canvas id="reportsChart" style="max-height: 400px;"></canvas>
@@ -173,24 +166,72 @@
 	
 	                        <!-- Nút hành động -->
 	                        <div class="d-flex justify-content-between align-items-center mt-4">	
-								<button onclick="savetopdf()" class="btn btn-success">
-	                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Xuất báo cáo
+								<button onclick="savetopdf()" class="btn btn-danger">
+	                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Xuất PDF
+	                            </button>
+	                            
+	                            <button onclick="savetopdf()" class="btn btn-primary">
+	                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Xuất CSV
+	                            </button>
+	                            
+	                            <button onclick="savetopdf()" class="btn btn-success">
+	                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Xuất Excel
 	                            </button>
 	
 	                            <button onclick="sendChartImage()" class="btn btn-warning">
 	                                <i class="bi bi-image me-1"></i>Lưu biểu đồ
 	                            </button>
 	                        </div>
-	
+	                        
+							<div class="card mt-4 border rounded shadow-sm bg-light"> 
+							    <div class="card-body">
+							        <h5 class="card-title mb-3">
+							            <i class="bi bi-qr-code-scan me-2"></i>Tải báo cáo bằng mã QR
+							        </h5>
+							
+							        <div class="row g-3 align-items-end">
+							            <div class="col-md-4">
+							                <label for="type_file" class="form-label fw-semibold">
+							                    <i class="bi bi-filetype-pdf me-1"></i>Chọn định dạng
+							                </label>
+							                <select class="form-select" id="type_file">
+							                    <option value="ft_pdf">PDF (.pdf)</option>
+							                    <option value="ft_xlsx">Excel (.xlsx)</option>
+							                    <option value="ft_csv">CSV (.csv)</option>
+							                </select>
+							            </div>
+							            <div class="col-md-3">
+							                <button onclick="gen_qr()" type="button" class="btn btn-danger w-100">
+							                    <i class="bi bi-qr-code me-1"></i>Hiện mã QR
+							                </button>
+							            </div>
+							            <div class="col-md-5 text-center">
+							                <div id="qr_container">
+							                    <img id="qr_img" src="" style="height: 200px;">
+							                </div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+
 	                    </div>
-	                </div>
-	
+	                </div>	
 	            </div>
 	        </div>
 	    </section>
 	</main>
 
 </body>
+	<!-- QR -->
+	<script>
+		function gen_qr() {
+ 			const text = document.getElementById("type_file").value;
+			const qrUrl = "qr?text=" + encodeURIComponent(text);
+			document.getElementById("qr_img").src = qrUrl + "&t=" + new Date().getTime(); // tránh cache
+		}
+	 </script>
+	 <!-- END QR -->	
+	
 	<!-- Script -->
 	<script>
 	  document.addEventListener("DOMContentLoaded", () => {
@@ -317,7 +358,7 @@
 		}
 	</script>
 	
-			<script>
+	<script>
                 document.addEventListener("DOMContentLoaded", () => {
                   echarts.init(document.querySelector("#trafficChart")).setOption({
                     tooltip: {
@@ -370,7 +411,15 @@
                     }]
                   });
                 });
-              </script>
+    </script>
+    
+    <!-- Date -->
+    <script>
+	   const today = new Date().toISOString().split('T')[0];
+	   document.querySelectorAll('input[type="date"]').forEach(function(input) {
+	      input.max = today;});
+	</script>
+	<!-- Date -->
 
 <script src="adjs/date-filter-validate.js"></script>
 <%@include file="/adjsp/lib/footer.jsp"%>
