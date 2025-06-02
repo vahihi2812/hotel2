@@ -170,11 +170,11 @@
 	                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Xuất PDF
 	                            </button>
 	                            
-	                            <button onclick="savetopdf()" class="btn btn-primary">
+	                            <button onclick="savetocsv()" class="btn btn-primary">
 	                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Xuất CSV
 	                            </button>
 	                            
-	                            <button onclick="savetopdf()" class="btn btn-success">
+	                            <button onclick="savetoxlsx()" class="btn btn-success">
 	                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Xuất Excel
 	                            </button>
 	
@@ -351,6 +351,36 @@
 		            "Content-Type": "application/x-www-form-urlencoded"
 		        },
 		        body: "action=savepdf"
+		    })
+		    .then(response => response.text())
+		    .then(data => alert("Báo cáo đã được lưu vào ổ E! Nếu không có ảnh, hãy lưu ấn lưu biểu đồ lần nữa <3"))
+		    .catch(error => console.error("Lỗi lưu báo cáo!"));
+		}
+	</script>
+	
+	<script>
+		function savetocsv() {	
+		    fetch("booking_report", {
+		        method: "POST",
+		        headers: {
+		            "Content-Type": "application/x-www-form-urlencoded"
+		        },
+		        body: "action=savecsv"
+		    })
+		    .then(response => response.text())
+		    .then(data => alert("Báo cáo đã được lưu vào ổ E! Nếu không có ảnh, hãy lưu ấn lưu biểu đồ lần nữa <3"))
+		    .catch(error => console.error("Lỗi lưu báo cáo!"));
+		}
+	</script>
+	
+	<script>
+		function savetoxlsx() {	
+		    fetch("booking_report", {
+		        method: "POST",
+		        headers: {
+		            "Content-Type": "application/x-www-form-urlencoded"
+		        },
+		        body: "action=savexlsx"
 		    })
 		    .then(response => response.text())
 		    .then(data => alert("Báo cáo đã được lưu vào ổ E! Nếu không có ảnh, hãy lưu ấn lưu biểu đồ lần nữa <3"))

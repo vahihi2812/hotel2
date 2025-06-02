@@ -26,23 +26,28 @@ public class DownloadServlet extends HttpServlet {
         		String tmp = Booking_reportController.getPDFPath();
                 if(tmp != null || !"".equals(tmp)) {
                 	filePath = tmp;
-                }
+                }break;
         	}
-        	break;
+        	
         	case "ft_xlsx":{
         		String tmp = Booking_reportController.getXLSXPath();
                 if(tmp != null || !"".equals(tmp)) {
                 	filePath = tmp;
-                }
+                }break;
         	}
-        	break;
+        	
         	case "ft_csv":{
         		String tmp = Booking_reportController.getCSVPath();
                 if(tmp != null || !"".equals(tmp)) {
                 	filePath = tmp;
-                }
+				}
+				break;
         	}
-        	break;
+        	
+        	default:{
+        		break;
+        	}
+        	
         }
         
         File file = new File(filePath);

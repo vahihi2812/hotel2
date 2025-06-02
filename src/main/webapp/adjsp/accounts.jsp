@@ -64,6 +64,16 @@
 							    <span>Thêm tài khoản mới</span>
 							  </button>
 							</div>
+			
+							<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+							    <form action="accounts" method="post" class="d-flex align-items-center gap-2 flex-grow-1">
+							        <input type="hidden" name="action" value="addbysheet"/>
+							        <label for="linkInput" class="form-label mb-0 flex-shrink-0">Thêm bằng link Sheet:</label>
+							        <input type="text" id="linkInput" name="linksheet" placeholder="https://docs.google.com/spreadsheets/d/e/xxx/pub?output=csv" 
+							        class="form-control form-control-sm flex-grow-1" style="min-width: 200px;" />
+							        <button type="submit" class="btn btn-sm btn-primary">Thêm</button>
+							    </form>
+							</div>
 
 							<!-- Table with stripped rows -->
 							<table class="table datatable">

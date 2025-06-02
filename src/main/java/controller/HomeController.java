@@ -33,10 +33,11 @@ public class HomeController extends HttpServlet {
 
 		int id_1 = year * 100 + month;
 		int id_2 = year * 10000 + month * 100 + day;
-		id_2 = 20250601;
-
+		
+		ArrayList<Double> l_rr = getRevList(year, id_1, id_2);
+		
 		req.setAttribute("total_list", getTotalList(year, id_1, id_2));
-		req.setAttribute("list1", getRevList(year, id_1, id_2));
+		req.setAttribute("list1", l_rr);
 
 		System.out.println(id_2);
 		

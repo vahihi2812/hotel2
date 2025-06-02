@@ -2,6 +2,8 @@ package test;
 
 import java.io.File;
 import java.util.Properties;
+
+import controller.Booking_reportController;
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.PasswordAuthentication;
@@ -47,7 +49,7 @@ public class test3 {
 			
 			// Attachment Part
 			MimeBodyPart attachmentPart = new MimeBodyPart();
-			String filePath = "E:\\my_booking_report_1748748187240.pdf";
+			String filePath = Booking_reportController.getPDFPath();
 			System.out.println("Attachment path is - " + filePath);
 			attachmentPart.attachFile(new File(filePath));
 			

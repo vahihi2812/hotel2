@@ -168,6 +168,15 @@
 	<servlet-mapping>
 		<servlet-name>DownloadServlet</servlet-name>
 		<url-pattern>/download</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Error_formController</servlet-name>
+		<servlet-class>controller.Error_formController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Error_formController</servlet-name>
+		<url-pattern>/rpform</url-pattern>
 	</servlet-mapping>	
 	
 

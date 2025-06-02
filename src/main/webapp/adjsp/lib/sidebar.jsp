@@ -91,6 +91,13 @@
           <span>Quản lý đặt phòng</span>
         </a>
       </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/rpform">
+          <i class="bi bi-envelope-arrow-up"></i>
+          <span>Gửi báo cáo</span>
+        </a>
+      </li>
 
     </ul>
 

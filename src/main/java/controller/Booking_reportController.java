@@ -1,6 +1,8 @@
 package controller;
 
+import java.io.BufferedWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,6 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -34,13 +41,14 @@ public class Booking_reportController extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	private ArrayList<booking_report> list;
 	private ArrayList<Integer> list_tong_cong;
 	private String img_path = "E:/noimg.png";
-	private static String pdf_path = "E:\\pdfmau.pdf";
-	private static String csv_path = "E:\\danhsach.csv";
-	private static String xlsx_path = "E:\\test.xlsx";
+	private static String pdf_path = "E:\\mau.pdf";
+	private static String csv_path = "E:\\mau.csv";
+	private static String xlsx_path = "E:\\mau.xlsx";
+	private int[] a = { 0, 0, 0, 0, 0, 0 };
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -100,7 +108,7 @@ public class Booking_reportController extends HttpServlet {
 		}
 
 		this.list_tong_cong = getListTongCong();
-		
+
 		req.setAttribute("d", d);
 		req.setAttribute("s", start_date);
 		req.setAttribute("e", end_date);
@@ -115,8 +123,24 @@ public class Booking_reportController extends HttpServlet {
 		String action = req.getParameter("action");
 		if (action == null || "".equals(action)) {
 			saveimg(req, resp);
-		} else if ("savepdf".equals(action)) {
-			savePDF(req, resp);
+		}
+		else {
+			switch (action) {
+				case "savepdf":{
+					savePDF(req, resp);
+					break;
+				}
+				case "savexlsx":{
+					saveXLSX(req, resp);
+					break;
+				}
+				case "savecsv":{
+					saveCSV(req, resp);
+					break;
+				}				
+				default:
+					break;
+			}
 		}
 	}
 
@@ -140,21 +164,105 @@ public class Booking_reportController extends HttpServlet {
 	}
 
 	private void savePDF(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// int kq = 1;
-
 		try {
 			in_file_pdf();
 		} catch (Exception e) {
-			// kq = 0;
+			System.err.println("Xuat booking report pdf " + e);
+		}
+	}
+
+	private void saveXLSX(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			in_file_xlsx();
+		} catch (Exception e) {
+			System.err.println("Xuat booking report xlsx " + e);
+		}
+	}
+
+	private void saveCSV(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			in_file_csv();
+		} catch (Exception e) {
+			System.err.println("Xuat booking report csv " + e);
+		}
+	}
+
+	private void in_file_xlsx() {
+		// Excel
+		Workbook workbook = new XSSFWorkbook();
+		Sheet sheet = workbook.createSheet("danh_sach");
+
+		int rowIndex = 0;
+		
+		Row row = sheet.createRow(rowIndex++);
+		row.createCell(0).setCellValue("STT");
+		row.createCell(1).setCellValue("Thời gian");
+		row.createCell(2).setCellValue("Tầng 1");
+		row.createCell(3).setCellValue("Tầng 2");
+		row.createCell(4).setCellValue("Tầng 3");
+		row.createCell(5).setCellValue("Tầng 4");
+		row.createCell(6).setCellValue("Tầng 5");
+		row.createCell(7).setCellValue("Tổng");
+		
+		for (booking_report br : list) {
+			row = sheet.createRow(rowIndex++);
+			row.createCell(0).setCellValue(rowIndex - 1);
+			row.createCell(1).setCellValue(formatDateId(String.valueOf(br.getBr_id())));
+			row.createCell(2).setCellValue(br.getBr_floor_1());
+			row.createCell(3).setCellValue(br.getBr_floor_2());
+			row.createCell(4).setCellValue(br.getBr_floor_3());
+			row.createCell(5).setCellValue(br.getBr_floor_5());
+			row.createCell(6).setCellValue(br.getBr_floor_5());
+			row.createCell(7).setCellValue(br.getBr_amount());
 		}
 
-//		String message = (kq > 0) ? "success" : "fail";
-//		resp.sendRedirect(req.getContextPath() + "/booking_report?message=" + message);
+		try {
+			xlsx_path = "E:\\my_booking_report_" + System.currentTimeMillis() + ".xlsx";
+			FileOutputStream fileOut = new FileOutputStream(xlsx_path);
+			workbook.write(fileOut);
+			System.out.println("Ghi Excel thành công!");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void in_file_csv() {
+		csv_path = "E:\\my_booking_report_" + System.currentTimeMillis() + ".csv";
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(csv_path))) {
+			// Ghi tiêu đề
+			writer.write("date, f1, f2, f3, f4, f5, total");
+			writer.newLine();
+
+			// Ghi từng dòng dữ liệu
+			for (booking_report report : list) {
+				StringBuilder tmp = new StringBuilder("");
+				tmp.append(formatDateIdforCSV(String.valueOf(report.getBr_id())) + ",");
+				tmp.append(report.getBr_floor_1() + ",");
+				tmp.append(report.getBr_floor_2() + ",");
+				tmp.append(report.getBr_floor_3() + ",");
+				tmp.append(report.getBr_floor_4() + ",");
+				tmp.append(report.getBr_floor_5() + ",");
+				tmp.append(report.getBr_amount());
+				
+				writer.write(tmp.toString());
+				writer.newLine();
+			}
+
+			System.out.println("Đã ghi file booking_report.csv thành công.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void in_file_pdf() {
 		try {
-
 			pdf_path = "E:\\my_booking_report_" + System.currentTimeMillis() + ".pdf";
 
 			PdfWriter writer = new PdfWriter(pdf_path);
@@ -193,8 +301,6 @@ public class Booking_reportController extends HttpServlet {
 			Table table = new Table(columnWidths);
 			table.setHorizontalAlignment(HorizontalAlignment.CENTER).setFont(font).setFontSize(13)
 					.setTextAlignment(TextAlignment.CENTER);
-
-			int[] a = { 0, 0, 0, 0, 0, 0 };
 
 			// Thêm tiêu đề
 			table.addHeaderCell(new Cell().add(new Paragraph("STT").setBold()));
@@ -267,6 +373,33 @@ public class Booking_reportController extends HttpServlet {
 			return "Lỗi định dạng ID";
 		}
 	}
+	
+	private String formatDateIdforCSV(String id) {
+		if (id == null || id.length() < 4)
+			return "ID không hợp lệ";
+
+		try {
+			if (id.length() == 4) { // 20250517
+				// Năm
+				return id;
+			} else if (id.length() == 6) {
+				// Tháng + Năm (yyyyMM)
+				String year = id.substring(0, 4);
+				String month = id.substring(4, 6);
+				return Integer.parseInt(month) + "/" + year;
+			} else if (id.length() == 8) {
+				// Ngày + Tháng + Năm (yyyyMMdd)
+				String year = id.substring(0, 4);
+				String month = id.substring(4, 6);
+				String day = id.substring(6, 8);
+				return Integer.parseInt(day) + "/" + Integer.parseInt(month) + "/" + year;
+			} else {
+				return "Định dạng ID không hỗ trợ";
+			}
+		} catch (Exception e) {
+			return "Lỗi định dạng ID";
+		}
+	}
 
 	private ArrayList<booking_report> report_by_day(int syear, int eyear, int smonth, int emonth, int sday, int eday) {
 		ArrayList<booking_report> list = new ArrayList<>();
@@ -314,21 +447,21 @@ public class Booking_reportController extends HttpServlet {
 			a[5] += br.getBr_amount();
 		}
 
-		for(int i = 0; i < 6; i++) {
+		for (int i = 0; i < 6; i++) {
 			list.add(a[i]);
 		}
-		
+
 		return list;
 	}
-	
+
 	public static String getPDFPath() {
 		return pdf_path;
 	}
-	
+
 	public static String getXLSXPath() {
 		return xlsx_path;
 	}
-	
+
 	public static String getCSVPath() {
 		return csv_path;
 	}

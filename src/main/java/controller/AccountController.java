@@ -1,7 +1,10 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -27,7 +30,7 @@ public class AccountController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private ArrayList<account> list, list_acc_admin, list_acc_cus;
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		list = accountDAO.getIns().selectAll();
@@ -60,17 +63,31 @@ public class AccountController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
 
-		if ("add".equals(action)) {
+		if ("".equals(action) || action == null) {
+			return;
+		}
+
+		switch (action) {
+		case "add": {
 			addAcc(req, resp);
-		} else if ("delete".equals(action)) {
+			break;
+		}
+		case "delete": {
 			delAcc(req, resp);
-		} else if ("edit".equals(action)) {
+			break;
+		}
+		case "edit": {
 			editAcc(req, resp);
-		} else if ("addbyexcel".equals(action)) {
+			break;
+		}
+		case "addbyexcel": {
 			addAccByExcel(req, resp);
-		} else if ("addbyexcel".equals(action)) {
-			req.setAttribute("list_acc", list);
-			req.getRequestDispatcher("/adjsp/accounts.jsp").forward(req, resp);
+			break;
+		}
+		case "addbysheet": {
+			addAccBySheet(req, resp);
+			break;
+		}
 		}
 	}
 
@@ -135,74 +152,122 @@ public class AccountController extends HttpServlet {
 	}
 
 	private void addAccByExcel(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-	    int kq = 1;
-	    
-	    ArrayList<account> list = new ArrayList<>();
+		int kq = 1;
 
-	    Part filePart = req.getPart("file");
-	    InputStream inputStream = filePart.getInputStream();
+		ArrayList<account> list = new ArrayList<>();
 
-	    try (Workbook workbook = new XSSFWorkbook(inputStream)) {
-	        Sheet sheet = workbook.getSheetAt(0);
-	        for (Row row : sheet) {
-	            if (row.getRowNum() == 0) continue; // Bỏ qua dòng tiêu đề
+		Part filePart = req.getPart("file");
+		InputStream inputStream = filePart.getInputStream();
 
-	            String account_username = getCellValueAsString(row.getCell(0));
-	            String account_password = getCellValueAsString(row.getCell(1));
-	            String roleStr = getCellValueAsString(row.getCell(2));
+		try (Workbook workbook = new XSSFWorkbook(inputStream)) {
+			Sheet sheet = workbook.getSheetAt(0);
+			for (Row row : sheet) {
+				if (row.getRowNum() == 0)
+					continue; // Bỏ qua dòng tiêu đề
 
-	            // Bỏ qua dòng nếu thiếu dữ liệu
-	            if (account_username.isEmpty() || account_password.isEmpty() || roleStr.isEmpty()) {
-	                System.out.println("Dòng thiếu dữ liệu, bỏ qua.");
-	                continue;
-	            }
+				String account_username = getCellValueAsString(row.getCell(0));
+				String account_password = getCellValueAsString(row.getCell(1));
+				String roleStr = getCellValueAsString(row.getCell(2));
 
-	            int role_id;
-	            try {
-	                role_id = Integer.parseInt(roleStr);
-	            } catch (NumberFormatException e) {
-	                System.out.println("Role ID không hợp lệ: " + roleStr);
-	                continue;
-	            }
+				// Bỏ qua dòng nếu thiếu dữ liệu
+				if (account_username.isEmpty() || account_password.isEmpty() || roleStr.isEmpty()) {
+					System.out.println("Dòng thiếu dữ liệu, bỏ qua.");
+					continue;
+				}
 
-	            account acc = new account();
-	            acc.setAccount_username(account_username);
-	            acc.setAccount_password(account_password);
-	            acc.setRole_id(role_id);
-	            list.add(acc);	            
-	        }
-	        
-	        kq = accountDAO.getIns().insertIgnore(list);
-	        System.out.println("Inserted " + kq + " account(s)");
-	        
-	    } catch (Exception e) {
-	        kq = 0;
-	        e.printStackTrace();
-	    }
+				int role_id;
+				try {
+					role_id = Integer.parseInt(roleStr);
+				} catch (NumberFormatException e) {
+					System.out.println("Role ID không hợp lệ: " + roleStr);
+					continue;
+				}
 
-	    String message = (kq > 0) ? "success" : "fail";
-	    resp.sendRedirect(req.getContextPath() + "/accounts?message=" + message);
+				account acc = new account();
+				acc.setAccount_username(account_username);
+				acc.setAccount_password(account_password);
+				acc.setRole_id(role_id);
+				list.add(acc);
+			}
+
+			kq = accountDAO.getIns().insertIgnore(list);
+			System.out.println("Inserted " + kq + " account(s)");
+
+		} catch (Exception e) {
+			kq = 0;
+			e.printStackTrace();
+		}
+
+		String message = (kq > 0) ? "success" : "fail";
+		resp.sendRedirect(req.getContextPath() + "/accounts?message=" + message);
 	}
-	
+
+	private void addAccBySheet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		String csv_link = req.getParameter("linksheet");
+
+		ArrayList<account> list = new ArrayList<>();
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(csv_link).openStream()))) {
+			String line;
+			int lineNumber = 0;
+
+			while ((line = reader.readLine()) != null) {
+				lineNumber++;
+				try {
+					String[] row = line.split(",");
+
+					if (row.length < 2) {
+						throw new IllegalArgumentException("Thiếu cột dữ liệu");
+					}
+
+					account acc = new account();
+					acc.setAccount_username(row[0].trim());
+					acc.setAccount_password(row[1].trim());
+					acc.setRole_id(Integer.parseInt(row[2].trim()));
+
+					list.add(acc);
+				} catch (Exception e) {
+					System.err.println("Lỗi ở dòng " + lineNumber + ": " + line);
+					System.err.println("Chi tiết: " + e.getMessage());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		int kq = 1;
+
+		try {
+			kq = accountDAO.getIns().insertIgnore(list);
+			System.out.println("Inserted " + kq + " account(s)");
+		} catch (Exception e) {
+			System.err.println("insert sheet " + e);
+		}
+
+		String message = (kq > 0) ? "success" : "fail";
+		resp.sendRedirect(req.getContextPath() + "/accounts?message=" + message);
+	}
+
 	// Hàm chuyển Cell về chuỗi an toàn
 	private String getCellValueAsString(Cell cell) {
-	    if (cell == null) return "";
-	    switch (cell.getCellType()) {
-	        case STRING:
-	            return cell.getStringCellValue().trim();
-	        case NUMERIC:
-	            // Nếu là số nguyên, không cần hiển thị phần thập phân
-	            return String.valueOf((int) cell.getNumericCellValue());
-	        case BOOLEAN:
-	            return String.valueOf(cell.getBooleanCellValue());
-	        case FORMULA:
-	            try {
-	                return cell.getStringCellValue().trim(); // hoặc xử lý thêm nếu cần
-	            } catch (IllegalStateException e) {
-	                return String.valueOf(cell.getNumericCellValue());
-	            }
-	        default:
-	            return "";
-	    }
+		if (cell == null)
+			return "";
+		switch (cell.getCellType()) {
+		case STRING:
+			return cell.getStringCellValue().trim();
+		case NUMERIC:
+			// Nếu là số nguyên, không cần hiển thị phần thập phân
+			return String.valueOf((int) cell.getNumericCellValue());
+		case BOOLEAN:
+			return String.valueOf(cell.getBooleanCellValue());
+		case FORMULA:
+			try {
+				return cell.getStringCellValue().trim(); // hoặc xử lý thêm nếu cần
+			} catch (IllegalStateException e) {
+				return String.valueOf(cell.getNumericCellValue());
+			}
+		default:
+			return "";
+		}
 	}
 }
