@@ -16,10 +16,6 @@ public class GenerateQRServlet extends HttpServlet {
 	/**
 	 * 
 	 */
-	// text =
-	// "https://docs.google.com/forms/d/e/1FAIpQLSdTjMKtKK5s0OvLRZE0R_2ipSopVamvtfGofCEtPIc91fpd4g/viewform?usp=header";
-	// text = "http://192.168.1.8:8080/hotel2/booking_report";
-
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -42,6 +38,10 @@ public class GenerateQRServlet extends HttpServlet {
 				}
 				case "ft_csv": {
 					text = ip_root + "download?ft=" + "ft_csv";
+					break;
+				}
+				case "ft_png": {
+					text = ip_root + "download?ft=" + "ft_png";
 					break;
 				}
 				case "err1": {

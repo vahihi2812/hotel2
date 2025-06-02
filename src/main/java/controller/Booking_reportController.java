@@ -35,16 +35,17 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 
 import dao.booking_reportDAO;
 import model.booking_report;
+import util.SendEmail;
 
 public class Booking_reportController extends HttpServlet {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private ArrayList<booking_report> list;
 	private ArrayList<Integer> list_tong_cong;
-	private String img_path = "E:/noimg.png";
+	private static String img_path = "E:/noimg.png";
 	private static String pdf_path = "E:\\mau.pdf";
 	private static String csv_path = "E:\\mau.csv";
 	private static String xlsx_path = "E:\\mau.xlsx";
@@ -122,25 +123,39 @@ public class Booking_reportController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
 		if (action == null || "".equals(action)) {
-			saveimg(req, resp);
-		}
-		else {
+			saveimg(req, resp); // save image
+		} else {
 			switch (action) {
-				case "savepdf":{
-					savePDF(req, resp);
-					break;
-				}
-				case "savexlsx":{
-					saveXLSX(req, resp);
-					break;
-				}
-				case "savecsv":{
-					saveCSV(req, resp);
-					break;
-				}				
-				default:
-					break;
+			case "savepdf": {
+				savePDF(req, resp);
+				break;
 			}
+			case "savexlsx": {
+				saveXLSX(req, resp);
+				break;
+			}
+			case "savecsv": {
+				saveCSV(req, resp);
+				break;
+			}
+			case "send_em": {
+				sendEM(req, resp);
+				break;
+			}
+			default:
+				break;
+			}
+		}
+	}
+
+	private void sendEM(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			String recipientEmail = req.getParameter("recipientEmail");
+			String format = req.getParameter("format");
+			SendEmail se = new SendEmail(recipientEmail, format);
+			se.send_email();
+		} catch (Exception e) {
+			System.err.println("send email " + e);
 		}
 	}
 
@@ -156,9 +171,9 @@ public class Booking_reportController extends HttpServlet {
 		byte[] imageBytes = Base64.getDecoder().decode(base64Image);
 
 		// Lưu file ảnh
-		this.img_path = "E:/booking_chart_image_" + System.currentTimeMillis() + ".png";
+		img_path = "E:/booking_chart_image_" + System.currentTimeMillis() + ".png";
 
-		try (FileOutputStream fos = new FileOutputStream(this.img_path)) {
+		try (FileOutputStream fos = new FileOutputStream(img_path)) {
 			fos.write(imageBytes);
 		}
 	}
@@ -193,7 +208,7 @@ public class Booking_reportController extends HttpServlet {
 		Sheet sheet = workbook.createSheet("danh_sach");
 
 		int rowIndex = 0;
-		
+
 		Row row = sheet.createRow(rowIndex++);
 		row.createCell(0).setCellValue("STT");
 		row.createCell(1).setCellValue("Thời gian");
@@ -203,7 +218,7 @@ public class Booking_reportController extends HttpServlet {
 		row.createCell(5).setCellValue("Tầng 4");
 		row.createCell(6).setCellValue("Tầng 5");
 		row.createCell(7).setCellValue("Tổng");
-		
+
 		for (booking_report br : list) {
 			row = sheet.createRow(rowIndex++);
 			row.createCell(0).setCellValue(rowIndex - 1);
@@ -250,7 +265,7 @@ public class Booking_reportController extends HttpServlet {
 				tmp.append(report.getBr_floor_4() + ",");
 				tmp.append(report.getBr_floor_5() + ",");
 				tmp.append(report.getBr_amount());
-				
+
 				writer.write(tmp.toString());
 				writer.newLine();
 			}
@@ -283,7 +298,7 @@ public class Booking_reportController extends HttpServlet {
 
 			// *** ẢNH ***
 			// File ảnh hoặc byte[] ảnh
-			ImageData imageData = ImageDataFactory.create(this.img_path);
+			ImageData imageData = ImageDataFactory.create(img_path);
 			Image pdfImage = new Image(imageData);
 
 			// Chỉnh kích thước
@@ -373,7 +388,7 @@ public class Booking_reportController extends HttpServlet {
 			return "Lỗi định dạng ID";
 		}
 	}
-	
+
 	private String formatDateIdforCSV(String id) {
 		if (id == null || id.length() < 4)
 			return "ID không hợp lệ";
@@ -464,5 +479,9 @@ public class Booking_reportController extends HttpServlet {
 
 	public static String getCSVPath() {
 		return csv_path;
+	}
+	
+	public static String getImg_path() {
+		return img_path;
 	}
 }

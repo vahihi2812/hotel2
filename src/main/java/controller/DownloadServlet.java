@@ -44,6 +44,14 @@ public class DownloadServlet extends HttpServlet {
 				break;
         	}
         	
+        	case "ft_png":{
+        		String tmp = Booking_reportController.getImg_path();
+                if(tmp != null || !"".equals(tmp)) {
+                	filePath = tmp;
+				}
+				break;
+        	}
+        	
         	default:{
         		break;
         	}

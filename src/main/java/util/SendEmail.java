@@ -1,4 +1,4 @@
-package test;
+package util;
 
 import java.io.File;
 import java.util.Properties;
@@ -14,12 +14,39 @@ import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 
-public class test3 {
-    public static void main(String[] args) {
-    	final String senderEmail = "vietanhqv204@gmail.com";
-		final String appPassword = "npqusbvazvjfwneq";
-		final String recipientEmail = "hoangtudzz93@gmail.com";
+public class SendEmail {
 
+	private static final String senderEmail = "vietanhqv204@gmail.com";
+	private static final String appPassword = "npqusbvazvjfwneq";
+	private String recipientEmail;
+	private String filePath = Booking_reportController.getPDFPath();
+	
+	public SendEmail(String recipientEmail, String format) {
+		switch(format) {
+			case "ft_pdf":{
+				this.filePath = Booking_reportController.getPDFPath();
+				break;
+			}
+			case "ft_xlsx":{
+				this.filePath = Booking_reportController.getXLSXPath();
+				break;
+			}
+			case "ft_csv":{
+				this.filePath = Booking_reportController.getCSVPath();
+				break;
+			}
+			case "ft_png":{
+				this.filePath = Booking_reportController.getImg_path();
+				break;
+			}
+			default:{
+				break;
+			}
+		}
+		this.recipientEmail = recipientEmail;
+	}
+
+	public void send_email() {
 		// SMTP Server Properties
 		Properties prop = new Properties();
 		prop.put("mail.smtp.auth", "true");
@@ -41,24 +68,24 @@ public class test3 {
 			message.setFrom(new InternetAddress(senderEmail));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail));
 			message.setSubject("Report for you");
-			message.setText("Hello \n This is a test email from Java \n Regards,\nQA Team");
+			message.setText("Hello \n This is a email from ThuCucHotel \n Regards,\nvahihi2812");
 
 			// Email Body Part
 			MimeBodyPart textPart = new MimeBodyPart();
-			textPart.setText("Hello \n\n This is a test email from Java \n\n Regards,\nQA Team");
-			
+			textPart.setText("Hello \n This is a email from ThuCucHotel \n Regards,\nvahihi2812");
+
 			// Attachment Part
 			MimeBodyPart attachmentPart = new MimeBodyPart();
-			String filePath = Booking_reportController.getPDFPath();
+			
 			System.out.println("Attachment path is - " + filePath);
 			attachmentPart.attachFile(new File(filePath));
-			
+
 			// Combine body and attachment parts
 			MimeMultipart multipart = new MimeMultipart();
 			multipart.addBodyPart(textPart);
 			multipart.addBodyPart(attachmentPart);
 			message.setContent(multipart);
-			
+
 			// Send Email
 			Transport.send(message);
 			System.out.println("Email Sent Successfully ***");
@@ -67,5 +94,5 @@ public class test3 {
 			e.printStackTrace();
 		}
 
-    }
+	}
 }

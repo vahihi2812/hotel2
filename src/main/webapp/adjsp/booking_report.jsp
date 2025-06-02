@@ -198,6 +198,7 @@
 							                    <option value="ft_pdf">PDF (.pdf)</option>
 							                    <option value="ft_xlsx">Excel (.xlsx)</option>
 							                    <option value="ft_csv">CSV (.csv)</option>
+							                    <option value="ft_png">Ảnh (.png)</option>
 							                </select>
 							            </div>
 							            <div class="col-md-3">
@@ -209,6 +210,45 @@
 							                <div id="qr_container">
 							                    <img id="qr_img" src="" style="height: 200px;">
 							                </div>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+							
+							<div class="card mt-4 border rounded shadow-sm bg-light">
+							    <div class="card-body">
+							        <h5 class="card-title mb-3 d-flex align-items-center">
+							            <i class="bi bi-envelope-arrow-up-fill me-2 text-primary fs-5"></i> Gửi báo cáo qua Gmail
+							        </h5>
+							
+							        <div class="row g-3 align-items-end">
+							            <!-- Chọn định dạng -->
+							            <div class="col-md-4">
+							                <label for="type_file" class="form-label fw-semibold">
+							                    <i class="bi bi-filetype-pdf me-1"></i> Chọn định dạng
+							                </label>
+							                <select class="form-select" id="type_file1">
+							                    <option value="ft_pdf">PDF (.pdf)</option>
+							                    <option value="ft_xlsx">Excel (.xlsx)</option>
+							                    <option value="ft_csv">CSV (.csv)</option>
+							                    <option value="ft_png">Ảnh (.png)</option>
+							                </select>
+							            </div>
+							
+							            <!-- Nhập email -->
+							            <div class="col-md-5">
+							                <label for="e_add" class="form-label fw-semibold">
+							                    <i class="bi bi-envelope-at me-1"></i> Email người nhận
+							                </label>
+							                <input type="email" name="recipientEmail" id="recipientEmail" class="form-control" placeholder="abc@gmail.com" required>
+							            </div>
+							
+							            <!-- Nút gửi -->
+							            <div class="col-md-3">
+							                <label class="form-label invisible">Gửi</label>
+							                <button onclick="sendEM()" type="button" class="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2" title="Gửi báo cáo">
+							                    <i class="bi bi-send-check-fill"></i> Gửi
+							                </button>
 							            </div>
 							        </div>
 							    </div>
@@ -343,6 +383,36 @@
 		}
 	</script>
 	
+	<script>
+	    function sendEM() {
+	        const recipientEmail = document.getElementById("recipientEmail").value.trim();
+	        const format = document.getElementById("type_file1").value;
+	
+	        if (!recipientEmail) {
+	            alert("Vui lòng nhập địa chỉ email!");
+	            return;
+	        }
+	
+	        fetch("booking_report", {
+	            method: "POST",
+	            headers: {
+	                "Content-Type": "application/x-www-form-urlencoded"
+	            },
+	            body: "action=send_em" +
+	                  "&recipientEmail=" + encodeURIComponent(recipientEmail) +
+	                  "&format=" + encodeURIComponent(format)
+	        })
+	        .then(response => response.text())
+	        .then(data => {
+	            alert("✅ Gửi mail thành công đến: " + recipientEmail);
+	        })
+	        .catch(error => {
+	            console.error("Lỗi gửi mail:", error);
+	            alert("❌ Gửi mail thất bại! Vui lòng kiểm tra lại.");
+	        });
+	    }
+	</script>
+
 	<script>
 		function savetopdf() {	
 		    fetch("booking_report", {
