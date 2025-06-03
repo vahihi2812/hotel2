@@ -77,7 +77,7 @@ public class SendEmail {
 			// Attachment Part
 			MimeBodyPart attachmentPart = new MimeBodyPart();
 			
-			System.out.println("Attachment path is - " + filePath);
+			//System.out.println("Attachment path is - " + filePath);
 			attachmentPart.attachFile(new File(filePath));
 
 			// Combine body and attachment parts

@@ -40,7 +40,8 @@
 	
 	</head>
 
-<body>	
+<body>
+	<%@include file="/adjsp/chat.jsp"%>	
 		<%
 		user u = (user) session.getAttribute("user");
 		account acc = (account) session.getAttribute("account");

@@ -177,7 +177,16 @@
 	<servlet-mapping>
 		<servlet-name>Error_formController</servlet-name>
 		<url-pattern>/rpform</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ChatGeminiServlet</servlet-name>
+		<servlet-class>controller.ChatGeminiServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ChatGeminiServlet</servlet-name>
+		<url-pattern>/chatgemini</url-pattern>
+	</servlet-mapping>		
 	
 
 </web-app>

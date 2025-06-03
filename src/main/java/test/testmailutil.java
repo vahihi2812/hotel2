@@ -4,7 +4,8 @@ import util.SendEmail;
 
 public class testmailutil {
 	public static void main(String[] args) {
-		SendEmail se = new SendEmail("hoangtudzz93@gmail.com", "ft_pdf");
+		String recp = "pnhi28z12@gmail.com";
+		SendEmail se = new SendEmail(recp, "ft_pdf");
 		se.send_email();
 	}
 }
