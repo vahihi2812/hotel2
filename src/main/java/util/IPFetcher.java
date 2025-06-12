@@ -5,10 +5,10 @@ import java.util.Enumeration;
 
 public class IPFetcher {
 
-    private int lastByte;
+    private String va_ip;
 
     private IPFetcher() {
-        fetchLastByte();
+    	fetchIP();
     }
 
     // Singleton: gọi getInstance() để lấy đối tượng
@@ -16,11 +16,11 @@ public class IPFetcher {
         return new IPFetcher();
     }
 
-    public int getLastByte() {
-        return lastByte;
+    public String getVa_ip() {
+        return va_ip;
     }
 
-    private void fetchLastByte() {
+    private void fetchIP() {
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
@@ -36,18 +36,17 @@ public class IPFetcher {
                     InetAddress address = addresses.nextElement();
                     if (address instanceof Inet4Address && !address.isLoopbackAddress()) {
                         String ip = address.getHostAddress(); // Ex: 192.168.1.105
-                        String[] parts = ip.split("\\.");
-                        lastByte = Integer.parseInt(parts[3]);
+                        va_ip = ip;
                         return;
                     }
                 }
             }
 
-            lastByte = -1; // Không tìm thấy
+            va_ip = "-1"; // Không tìm thấy
         } catch (Exception e) {
         	System.err.println("loi ip neeeeee");
             e.printStackTrace();
-            lastByte = -1;
+            va_ip = "-1";
         }
     }
 }

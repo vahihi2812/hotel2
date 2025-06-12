@@ -40,7 +40,19 @@ public class LoginController extends HttpServlet {
 			session.setAttribute("user", u);
 			
 			resp.sendRedirect(req.getContextPath() + "/home");
-		} else {
+		}
+		else if (acc != null && acc.getRole_id() == 2) {
+			
+			user u = userDAO.getInstance().getUserByAccountId(acc.getAccount_id());
+			accountDAO.getIns().updateLastLogin(acc);
+			
+			HttpSession session = req.getSession();			
+			session.setAttribute("account", acc);
+			session.setAttribute("user", u);
+			
+			resp.sendRedirect(req.getContextPath() + "/trangchu");
+		} 
+		else {
 			req.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
 			req.getRequestDispatcher("/adjsp/pages-login.jsp").forward(req, resp);
 		}

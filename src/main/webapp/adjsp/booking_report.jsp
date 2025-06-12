@@ -253,7 +253,69 @@
 							        </div>
 							    </div>
 							</div>
-
+							
+							<!-- Tiêu đề phụ dự đoán -->
+	                        <div class="d-flex justify-content-between align-items-center mb-3">
+	                            <h5 class="card-title mb-0">
+	                                <i class="bi bi-robot me-2"></i>Dự đoán bằng AI
+	                            </h5>
+	                        </div>
+							
+							 <!-- Form dự đoán -->
+	                        <form id="forecast-form" class="p-3 border rounded shadow-sm bg-light">
+	                            <input type="hidden" name="action" value="forecast" />
+	                            <div class="row g-4 align-items-end">
+	
+	                                <div class="col-md-3">
+	                                    <label class="form-label fw-semibold">
+	                                        <i class="bi bi-filter-circle me-1"></i>Dự đoán theo
+	                                    </label>
+	                                    <select name="f" class="form-select">
+	                                        <option value="day" ${f == 'day' ? 'selected' : ''}>Ngày</option>
+	                                        <option value="month" ${f == 'month' ? 'selected' : ''}>Tháng</option>
+	                                        <option value="year" ${f == 'year' ? 'selected' : ''}>Năm</option>
+	                                    </select>
+	                                </div>
+	
+	                                <div class="col-md-3">
+	                                    <label class="form-label fw-semibold">
+	                                        <i class="bi bi-calendar-date me-1"></i>Từ
+	                                    </label>
+	                                    <input type="date" name="d" class="form-control" value="${d}"/>
+	                                </div>
+	                                
+	                                <div class="col-md-3">
+	                                    <label class="form-label fw-semibold">
+	                                        <i class="bi bi-calendar-date me-1"></i>Số lượng
+	                                    </label>
+	                                    <input type="number" name="n" class="form-control" value="${n}"/>
+	                                </div>
+	
+	                                <div class="col-md-3">
+	                                    <button type="button" class="btn btn-primary w-100" onclick="forecast()">
+										    <i class="bi bi-search me-1"></i>Dự đoán
+										</button>
+	                                </div>
+	                            </div>
+	                        </form>
+	                        
+	                        <table class="table table-striped datatable">
+							    <thead>
+							        <tr>
+							            <th>STT</th>
+							            <th>Thời gian</th>
+							            <th>Số lượng</th>
+							        </tr>
+							    </thead>
+							    <tbody id="forecast-body">
+							    	<tr>
+							            <td>0</td>
+							            <td>(Tùy chỉnh)</td>
+							            <td>(lượt)</td>
+							        </tr>
+							    </tbody>
+							</table>
+							
 	                    </div>
 	                </div>	
 	            </div>
@@ -262,6 +324,62 @@
 	</main>
 
 </body>
+	<!-- FORECAST -->
+	<script>
+	function forecast() {
+	    const form = document.getElementById('forecast-form');
+	    const formData = new FormData(form);
+	
+	    fetch('booking_report?action=forecast', {
+	        method: 'POST',
+	        body: new URLSearchParams(formData)
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+	            throw new Error('HTTP status ' + response.status);
+	        }
+	        return response.json(); // OK thì mới parse JSON
+	    })
+	    .then(data => {
+		    console.log("Forecast data:", data);  // Thêm dòng này
+		    const tbodyList = document.querySelectorAll('tbody');
+		    const tbody = tbodyList[1];
+		    tbody.innerHTML = "";
+		
+		    if (data.error) {
+		        alert("Lỗi từ server: " + data.error);
+		        return;
+		    }
+		
+		    let index = 1;
+		    for (const [date, value] of Object.entries(data)) {
+		        const tr = document.createElement('tr');
+		
+		        const tdIndex = document.createElement('td');
+		        tdIndex.innerText = index;
+		
+		        const tdDate = document.createElement('td');
+		        tdDate.innerText = date;
+		
+		        const tdValue = document.createElement('td');
+		        tdValue.innerText = value;
+		
+		        tr.appendChild(tdIndex);
+		        tr.appendChild(tdDate);
+		        tr.appendChild(tdValue);
+		
+		        tbody.appendChild(tr);
+		        index++;
+		    }
+		})
+	    .catch(err => {
+	        console.error('Lỗi dự đoán:', err);
+	        alert("Không thể lấy dữ liệu dự đoán.");
+	    });
+	 }
+	</script>
+	<!-- END FORECAST -->
+
 	<!-- QR -->
 	<script>
 		function gen_qr() {

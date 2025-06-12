@@ -186,7 +186,69 @@
 	<servlet-mapping>
 		<servlet-name>ChatGeminiServlet</servlet-name>
 		<url-pattern>/chatgemini</url-pattern>
-	</servlet-mapping>		
+	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>Cus_RoomController</servlet-name>
+		<servlet-class>controller.Cus_RoomController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Cus_RoomController</servlet-name>
+		<url-pattern>/phong</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Cus_HomeController</servlet-name>
+		<servlet-class>controller.Cus_HomeController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Cus_HomeController</servlet-name>
+		<url-pattern>/trangchu</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Cus_Error_formController</servlet-name>
+		<servlet-class>controller.Cus_Error_formController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Cus_Error_formController</servlet-name>
+		<url-pattern>/baocaoloi</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>ajaxServlet</servlet-name>
+        <servlet-class>com.vnpay.common.ajaxServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ajaxServlet</servlet-name>
+        <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>VnpayReturn</servlet-name>
+        <servlet-class>com.vnpay.common.VnpayReturn</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>VnpayReturn</servlet-name>
+        <url-pattern>/vnpayReturn</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+		<servlet-name>Cus_PaymentController</servlet-name>
+		<servlet-class>controller.Cus_PaymentController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Cus_PaymentController</servlet-name>
+		<url-pattern>/chitiet</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>PayServlet</servlet-name>
+		<servlet-class>controller.PayServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PayServlet</servlet-name>
+		<url-pattern>/PayServlet</url-pattern>
+	</servlet-mapping>				
 
 </web-app>

@@ -1,9 +1,15 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -49,7 +55,9 @@ public class Booking_reportController extends HttpServlet {
 	private static String pdf_path = "E:\\mau.pdf";
 	private static String csv_path = "E:\\mau.csv";
 	private static String xlsx_path = "E:\\mau.xlsx";
-	private int[] a = { 0, 0, 0, 0, 0, 0 };
+	
+    // URL endpoint Flask server
+	private static String endpoint = "https://fc2c-35-185-125-179.ngrok-free.app/forecast";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -142,10 +150,78 @@ public class Booking_reportController extends HttpServlet {
 				sendEM(req, resp);
 				break;
 			}
+			case "forecast": {
+				doForecast(req, resp);
+				break;
+			}
 			default:
 				break;
 			}
 		}
+	}
+
+	private void doForecast(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	    try {
+	        String d = req.getParameter("d");
+	        String n = req.getParameter("n");
+	        String f = req.getParameter("f");
+
+	        String jsonInput = "{"
+	                + "\"d\": \"" + d + "\","
+	                + "\"n\": " + n + ","
+	                + "\"f\": \"" + f + "\""
+	                + "}";
+
+	        System.out.println(jsonInput);
+
+	        URL url = new URL(endpoint);
+	        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	        conn.setRequestMethod("POST");
+	        conn.setRequestProperty("Content-Type", "application/json; utf-8");
+	        conn.setRequestProperty("Accept", "application/json");
+	        conn.setDoOutput(true);
+
+	        try (OutputStream os = conn.getOutputStream()) {
+	            byte[] input = jsonInput.getBytes("utf-8");
+	            os.write(input, 0, input.length);
+	        }
+
+	        int code = conn.getResponseCode();
+	        InputStream responseStream = (code == 200) ? conn.getInputStream() : conn.getErrorStream();
+
+	        try (BufferedReader br = new BufferedReader(new InputStreamReader(responseStream, "utf-8"))) {
+	            StringBuilder response = new StringBuilder();
+	            String line;
+	            while ((line = br.readLine()) != null) {
+	                response.append(line.trim());
+	            }
+
+	            System.out.println("Server response:");
+	            System.out.println(response.toString());
+
+	            // Trả về response cho client (trình duyệt)
+	            resp.setContentType("application/json");
+	            resp.setCharacterEncoding("UTF-8");
+
+	            if (code == 200) {
+	                // Trả JSON gốc từ endpoint
+	                resp.getWriter().write(response.toString());
+	            } else {
+	                // Trả lỗi nếu endpoint trả lỗi
+	                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	                resp.getWriter().write("{\"error\": \"External API returned error code " + code + "\"}");
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        System.out.println("Error: " + e.getMessage());
+	        e.printStackTrace();
+
+	        resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	        resp.setContentType("application/json");
+	        resp.setCharacterEncoding("UTF-8");
+	        resp.getWriter().write("{\"error\": \"Internal server error\"}");
+	    }
 	}
 
 	private void sendEM(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -278,6 +354,7 @@ public class Booking_reportController extends HttpServlet {
 
 	private void in_file_pdf() {
 		try {
+			int[] a = { 0, 0, 0, 0, 0, 0 };
 			pdf_path = "E:\\my_booking_report_" + System.currentTimeMillis() + ".pdf";
 
 			PdfWriter writer = new PdfWriter(pdf_path);
@@ -480,7 +557,7 @@ public class Booking_reportController extends HttpServlet {
 	public static String getCSVPath() {
 		return csv_path;
 	}
-	
+
 	public static String getImg_path() {
 		return img_path;
 	}

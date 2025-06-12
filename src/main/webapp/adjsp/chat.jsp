@@ -38,7 +38,7 @@
         }
         #dragBtn {
             position: fixed;
-            bottom: 20px;
+            bottom: 100px;
             right: 5px;
             z-index: 2000;
             user-select: none;

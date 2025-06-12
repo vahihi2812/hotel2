@@ -20,7 +20,7 @@ public class GenerateQRServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String ip_root = "http://192.168.1." + IPFetcher.getInstance().getLastByte() + ":8080/hotel2/";
+		String ip_root = "http://" + IPFetcher.getInstance().getVa_ip() + ":8080/hotel2/";
 		
 		String text = req.getParameter("text"); // nội dung QR code
 		if (text == null || text.isEmpty()) {
