@@ -11,6 +11,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 	<link href="adcss/style_high_chart.css" rel="stylesheet">
+	<link href="adcss/hc2.css" rel="stylesheet">
 	<%@include file="/adjsp/lib/header.jsp"%>
 	<%@include file="/adjsp/lib/sidebar.jsp"%>
 <body>
@@ -117,7 +118,7 @@
 	                        <h5 class="card-title">Tỉ lệ đặt phòng</h5>
 	                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
 	                        <figure class="highcharts-figure">
-						        <div id="container"></div>
+						        <div id="container1"></div>
 						    </figure>
 	
 	                        <!-- Bảng thống kê -->
@@ -320,6 +321,26 @@
 							    </tbody>
 							</table>
 							
+							<figure class="highcharts-figure">
+							    <div id="container"></div>
+							    <div id="sliders">
+							        <table>
+							            <tr>
+							                <td><label for="alpha">Góc X</label></td>
+							                <td><input id="alpha" type="range" min="0" max="45" value="15"/> <span id="alpha-value" class="value"></span></td>
+							            </tr>
+							            <tr>
+							                <td><label for="beta">Góc Y</label></td>
+							                <td><input id="beta" type="range" min="-45" max="45" value="15"/> <span id="beta-value" class="value"></span></td>
+							            </tr>
+							            <tr>
+							                <td><label for="depth">Góc Z</label></td>
+							                <td><input id="depth" type="range" min="20" max="100" value="50"/> <span id="depth-value" class="value"></span></td>
+							            </tr>
+							        </table>
+							    </div>
+							</figure>
+							
 	                    </div>
 	                </div>	
 	            </div>
@@ -328,6 +349,74 @@
 	</main>
 
 </body>
+
+	<script>
+		// Set up the chart
+		const chartForecast = new Highcharts.Chart({
+		    chart: {
+		        renderTo: 'container',
+		        type: 'column',
+		        options3d: {
+		            enabled: true,
+		            alpha: 15,
+		            beta: 15,
+		            depth: 50,
+		            viewDistance: 25
+		        }
+		    },
+		    xAxis: {
+		        type: 'category'
+		    },
+		    yAxis: {
+		        title: {
+		            enabled: false
+		        }
+		    },
+		    tooltip: {
+		        headerFormat: '<b>{point.key}</b><br>',
+		        pointFormat: 'Số lượt đặt phòng: {point.y}'
+		    },
+		    title: {
+		        text: 'Biểu đồ đặt phòng'
+		    },
+		    subtitle: {
+		        text: 'Đơn vị: lượt'
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    plotOptions: {
+		        column: {
+		            depth: 25
+		        }
+		    },
+		    series: [{
+		        data: [
+		        	['A', 10],
+		            ['B', 20],
+		            ['C', 15]
+				],
+		        colorByPoint: true
+		    }]
+		});
+	
+		function showValues() {
+		    document.getElementById('alpha-value').innerText = chartForecast.options.chart.options3d.alpha;
+		    document.getElementById('beta-value').innerText = chartForecast.options.chart.options3d.beta;
+		    document.getElementById('depth-value').innerText = chartForecast.options.chart.options3d.depth;
+		}
+
+		document.querySelectorAll('#sliders input').forEach(input =>
+		    input.addEventListener('input', e => {
+		        chartForecast.options.chart.options3d[e.target.id] = parseFloat(e.target.value);
+		        chartForecast.redraw(false);
+		        showValues();
+		    })
+		);
+
+		showValues();		
+	</script>
+
 	<!-- FORECAST -->
 	<script>
 	function forecast() {
@@ -394,6 +483,10 @@
 	            tbody.appendChild(tr);
 	            index++;
 	        }
+
+	     	// Sau khi render bảng, cập nhật biểu đồ
+	        const chartData = Object.entries(data).map(([date, value]) => [date, value]);
+	        chartForecast.series[0].setData(chartData);
 	    })
 	    .catch(err => {
 	        console.error('Lỗi dự đoán:', err);
@@ -656,7 +749,7 @@
     
     <!-- High chart -->
 	<script>
-	    Highcharts.chart('container', {
+	    Highcharts.chart('container1', {
 	        chart: {
 	            type: 'pie',
 	            options3d: {

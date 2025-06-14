@@ -1,7 +1,7 @@
 package util;
 
 public class NgrokLink {
-	private static final String link = "https://513a-34-42-28-175.ngrok-free.app" + "/forecast";
+	private static final String link = "https://5dcf-34-23-32-81.ngrok-free.app" + "/forecast";
 		
     private NgrokLink() {
     }
