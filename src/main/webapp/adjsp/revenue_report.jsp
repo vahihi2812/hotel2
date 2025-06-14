@@ -171,6 +171,8 @@
 	                                <i class="bi bi-image me-1"></i>Lưu biểu đồ
 	                            </button>
 	                        </div>
+	                        
+	                        <canvas id="reportsChart1" style="max-height: 400px;"></canvas>
 	
 	                    </div>
 	                </div>
@@ -181,6 +183,39 @@
 	</main>
 
 </body>
+		<!-- Script -->
+		<script>
+		  document.addEventListener("DOMContentLoaded", () => {
+			  const data = {
+					  labels: [
+					    'Phòng',
+					    'Làm đẹp',
+					    'Thể thao',
+					    'Dịch vụ',
+					    'Ăn uống'
+					  ],
+					  datasets: [{
+					    label: 'Tương quan doanh thu',
+					    data: [<%= list_ty_le.get(0)%>, <%= list_ty_le.get(1)%>, <%= list_ty_le.get(2)%>, <%= list_ty_le.get(3)%>, <%= list_ty_le.get(4)%>],
+					    backgroundColor: [
+					      'rgb(255, 99, 132)',
+					      'rgb(75, 192, 192)',
+					      'rgb(255, 205, 86)',
+					      'rgb(201, 203, 207)',
+					      'rgb(54, 162, 235)'
+					    ]
+					  }]
+					};
+		
+		    const config1 = {
+		    	type: 'polarArea',
+		    	data: data,
+		    	options: {}};	
+		    const ctx1 = document.getElementById("reportsChart1").getContext("2d");
+		    new Chart(ctx1, config1);
+		  });
+		</script>
+
 	<!-- Script -->
 	<script>
 	  document.addEventListener("DOMContentLoaded", () => {
@@ -318,7 +353,7 @@
                       left: 'center'
                     },
                     series: [{
-                      name: 'lượt',
+                      name: 'triệu VNĐ',
                       type: 'pie',
                       radius: ['40%', '70%'],
                       avoidLabelOverlap: false,

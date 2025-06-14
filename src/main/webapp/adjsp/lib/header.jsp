@@ -35,8 +35,22 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-growl/1.0.0/jquery.bootstrap-growl.min.js"></script>
 		
+		<!-- JS FOR HIGH CHART -->
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+	    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+	    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+	    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+	    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+		<script src="https://code.highcharts.com/modules/heatmap.js"></script>
+		<script src="https://code.highcharts.com/modules/treemap.js"></script>
+		
+		<!-- APEX -->
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+		
 		<!-- Template Main CSS File -->
 		<link href="adcss/style.css" rel="stylesheet">
+		
+		
 	
 	</head>
 

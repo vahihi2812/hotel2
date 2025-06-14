@@ -1,3 +1,4 @@
+<%@page import="model.customer_address"%>
 <%@page import="model.customer_report"%>
 <%@page import="model.room"%>
 <%@page import="model.customer"%>
@@ -10,6 +11,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+	<link href="adcss/hc1.css" rel="stylesheet">
 	<%@include file="/adjsp/lib/header.jsp"%>
 	<%@include file="/adjsp/lib/sidebar.jsp"%>
 <body>	
@@ -42,6 +44,7 @@
 	%>
 	
 	<%ArrayList<customer_report> list = (ArrayList<customer_report>)request.getAttribute("list");%>
+	<%ArrayList<customer_address> list_add = (ArrayList<customer_address>)request.getAttribute("list_add");%>
 	
 	<main id="main" class="main">
 	
@@ -158,6 +161,10 @@
 	                                <i class="bi bi-image me-1"></i>Lưu biểu đồ
 	                            </button>
 	                        </div>
+	                        
+	                        <figure class="highcharts-figure">
+							    <div id="container"></div>
+							</figure>
 	
 	                    </div>
 	                </div>
@@ -293,6 +300,46 @@
 		    .catch(error => console.error("Lỗi lưu báo cáo!"));
 		}
 	</script>
+	
+	<!-- HIGH CHART -->
+	<script>
+		Highcharts.chart('container', {
+		    colorAxis: {
+		        minColor: '#FFFFFF',
+		        maxColor: Highcharts.getOptions().colors[0]
+		    },
+		    series: [{
+		        type: 'treemap',
+		        layoutAlgorithm: 'squarified',
+		        clip: false,
+		        data: [{
+		            name: 'Miền Bắc',
+		            value: <%=list_add.get(0).getCa_amount()%>,
+		            colorValue: 1
+		        }, {
+		            name: 'Miền Nam',
+		            value: <%=list_add.get(1).getCa_amount()%>,
+		            colorValue: 2
+		        }, {
+		            name: 'Miền Trung',
+		            value: <%=list_add.get(2).getCa_amount()%>,
+		            colorValue: 3
+		        }, {
+		            name: 'Quốc tế',
+		            value: <%=list_add.get(3).getCa_amount()%>,
+		            colorValue: 4
+		        }, {
+		            name: 'Chưa xác định',
+		            value: <%=list_add.get(4).getCa_amount()%>,
+		            colorValue: 5
+		        },]
+		    }],
+		    title: {
+		        text: 'Địa chỉ khách hàng'
+		    }
+		});
+	</script>
+	<!-- END HIGH CHART -->
 
 	<script src="adjs/date-filter-validate.js"></script>
 <%@include file="/adjsp/lib/footer.jsp"%>

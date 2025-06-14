@@ -41,6 +41,7 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 
 import dao.booking_reportDAO;
 import model.booking_report;
+import util.NgrokLink;
 import util.SendEmail;
 
 public class Booking_reportController extends HttpServlet {
@@ -57,7 +58,7 @@ public class Booking_reportController extends HttpServlet {
 	private static String xlsx_path = "E:\\mau.xlsx";
 	
     // URL endpoint Flask server
-	private static String endpoint = "https://fc2c-35-185-125-179.ngrok-free.app/forecast";
+	private static String endpoint = NgrokLink.getInstance().getLink();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

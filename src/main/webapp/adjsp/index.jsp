@@ -412,20 +412,20 @@
 							<div class="activity">
 
 								<div class="activity-item d-flex">
-									<div class="activite-label">32 min</div>
+									<div class="activite-label">32 phút</div>
 									<i
 										class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-									<div class="activity-content">Khách hàng Nguyễn Thu đặt
+									<div class="activity-content">Khách hàng Nguyễn Sơn đặt
 										phòng 101</div>
 								</div>
 								<!-- End activity item-->
 
 								<div class="activity-item d-flex">
-									<div class="activite-label">56 min</div>
+									<div class="activite-label">56 phút</div>
 									<i
 										class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
 									<div class="activity-content">Khách hàng Nguyễn Thu đặt
-										phòng 101</div>
+										phòng 202</div>
 								</div>
 								<!-- End activity item-->
 
@@ -433,31 +433,31 @@
 									<div class="activite-label">2 hrs</div>
 									<i
 										class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-									<div class="activity-content">Khách hàng Nguyễn Thu đặt
-										phòng 101</div>
+									<div class="activity-content">Khách hàng Hoàng Nam đặt
+										phòng 301</div>
 								</div>
 								<!-- End activity item-->
 
 								<div class="activity-item d-flex">
-									<div class="activite-label">1 day</div>
+									<div class="activite-label">1 ngày</div>
 									<i
 										class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-									<div class="activity-content">Khách hàng Nguyễn Thu đặt
-										phòng 101</div>
+									<div class="activity-content">Khách hàng Đỗ Văn Huy đặt
+										phòng 103</div>
 								</div>
 								<!-- End activity item-->
 
 								<div class="activity-item d-flex">
-									<div class="activite-label">2 days</div>
+									<div class="activite-label">2 ngày</div>
 									<i
 										class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-									<div class="activity-content">Khách hàng Nguyễn Thu đặt
-										phòng 101</div>
+									<div class="activity-content">Khách hàng Lê Nam đặt
+										phòng 403</div>
 								</div>
 								<!-- End activity item-->
 
 								<div class="activity-item d-flex">
-									<div class="activite-label">4 weeks</div>
+									<div class="activite-label">4 tuần</div>
 									<i
 										class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
 									<div class="activity-content">Khách hàng Nguyễn Thu đặt

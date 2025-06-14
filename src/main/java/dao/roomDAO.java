@@ -197,4 +197,25 @@ public class roomDAO implements daoInterface<room> {
 		}
 		return list;
 	}
+	
+	public int updateTrangThai(int room_id, int rs_id) {
+		int kq = 0;
+		String sql = "UPDATE room SET rs_id = ? WHERE room_id = ?";
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, rs_id);
+			ps.setInt(2, room_id);
+			kq = ps.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("update " + e);
+		}finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "room");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return kq;
+	}
 }

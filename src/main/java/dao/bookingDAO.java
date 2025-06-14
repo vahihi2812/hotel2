@@ -28,34 +28,28 @@ public class bookingDAO implements daoInterface<booking> {
 	@Override
 	public int insert(booking t) {
 		int kq = 0;
-		String sql = "INSERT INTO booking(booking_time, booking_start_date, booking_end_date, "
-				+ "booking_service_cost, booking_room_cost, booking_total_cost, "
-				+ "customer_id, room_id, payment_id, bs_id) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
-			
+			String sql = "INSERT INTO booking(booking_start_date, booking_end_date, booking_room_cost, booking_total_cost, customer_id, room_id) " 
+					+ "VALUES (?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = con.prepareStatement(sql);
-			ps.setTimestamp(1, t.getBooking_time());
-			ps.setDate(2, t.getBooking_start_date());
-			ps.setDate(3, t.getBooking_end_date());
-			ps.setDouble(4, t.getBooking_service_cost());
-			ps.setDouble(5, t.getBooking_room_cost());
-			ps.setDouble(6, t.getBooking_total_cost());
-			ps.setInt(7, t.getCustomer_id());
-			ps.setInt(8, t.getRoom_id());
-			ps.setInt(9, t.getPayment_id());
-			ps.setInt(10, t.getBs_id());
+			ps.setDate(1, t.getBooking_start_date());
+			ps.setDate(2, t.getBooking_end_date());
+			ps.setDouble(3, t.getBooking_room_cost());
+			ps.setDouble(4, t.getBooking_total_cost());
+			ps.setInt(5, t.getCustomer_id());
+			ps.setInt(6, t.getRoom_id());
 
 			kq = ps.executeUpdate();
 		} catch (Exception e) {
-			System.out.println("insert: " + e.getMessage());
-		}finally {
-        	try {
-				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "booking");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			System.out.println("insert: " + e);
 		}
+//		finally {
+//        	try {
+//				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "booking");
+//			} catch (SQLException e) {
+//				System.out.println("insert booking " + e);
+//			}
+//		}
 		return kq;
 	}
 

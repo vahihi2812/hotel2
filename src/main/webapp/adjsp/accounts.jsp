@@ -43,6 +43,7 @@
 									  <option value="all" ${filter == 'all' ? 'selected' : ''}>Tất cả</option>
 									  <option value="admin" ${filter == 'admin' ? 'selected' : ''}>Admin</option>
 									  <option value="cus" ${filter == 'cus' ? 'selected' : ''}>Khách hàng</option>
+									  <option value="tam" ${filter == 'tam' ? 'selected' : ''}>Bị ẩn</option>
 								   </select>
 							    </form>
 							    
@@ -97,7 +98,7 @@
 								                </c:choose>
 								            </td>
 								            <td>
-								                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal"
+								            	<button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#viewModal"
 								                    data-account-id="${acc.account_id}"
 								                    data-account-username="${acc.account_username}"
 								                    data-account-password="${acc.account_password}"
@@ -121,11 +122,27 @@
 								                    data-role-id="${acc.role_id}">
 								                    <i class="bi bi-pencil"></i>
 								                </button>
-								                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
-								                    data-account-id="${acc.account_id}"
-								                    data-account-username="${acc.account_username}">
-								                    <i class="bi bi-trash"></i>
-								                </button>
+								            	<c:choose>
+								                    <c:when test="${acc.account_status == 1}">
+										                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModalTam"
+										                    data-account-id="${acc.account_id}"
+										                    data-account-username="${acc.account_username}">
+										                    <i class="bi bi-trash"></i>
+										                </button>
+								                    </c:when>
+								                    <c:when test="${acc.account_status == 0}">
+								                    	<button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
+										                    data-account-id="${acc.account_id}"
+										                    data-account-username="${acc.account_username}">
+										                    <i class="bi bi-exclamation-triangle-fill"></i>
+										                </button>
+										                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModalKP"
+										                    data-account-id="${acc.account_id}"
+										                    data-account-username="${acc.account_username}">
+										                    <i class="bi bi-arrow-counterclockwise"></i>
+										                </button>
+								                    </c:when>
+								                </c:choose>
 								            </td>
 								        </tr>
 								    </c:forEach>
@@ -265,13 +282,13 @@
 		</div>
 	</div>
 
-	<!-- Delete Modal -->
+	<!-- Delete vinh vien Modal -->
 	<div class="modal fade" id="deleteModal" tabindex="-1">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form id="deleteForm" action="accounts" method="post">
+				<form id="deleteForm3" action="accounts" method="post">
 					<!-- Hidden field để truyền username hoặc id -->
-					<input type="hidden" name="account_id" id="account_id" /> <input type="hidden"
+					<input type="hidden" name="account_id" id="account_id_delete" /> <input type="hidden"
 						name="action" value="delete" />
 					<div class="modal-header">
 						<h5 class="modal-title">Xác nhận xóa tài khoản</h5>
@@ -284,6 +301,56 @@
 						<button type="button" class="btn btn-secondary"
 							data-bs-dismiss="modal">Hủy</button>
 						<button type="submit" class="btn btn-danger">Xóa</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Delete tam Modal -->
+	<div class="modal fade" id="deleteModalTam" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form id="deleteForm1" action="accounts" method="post">
+					<!-- Hidden field để truyền username hoặc id -->
+					<input type="hidden" name="account_id" id="account_id_tam" /> <input type="hidden"
+						name="action" value="delete_tam" />
+					<div class="modal-header">
+						<h5 class="modal-title">Xác nhận xóa tạm thời tài khoản</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<p>Bạn có chắc chắn muốn xóa tạm thời tài khoản này?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">Hủy</button>
+						<button type="submit" class="btn btn-danger">Xóa</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Khoi phuc Modal -->
+	<div class="modal fade" id="deleteModalKP" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form id="deleteForm2" action="accounts" method="post">
+					<!-- Hidden field để truyền username hoặc id -->
+					<input type="hidden" name="account_id" id="account_id_kp" /> <input type="hidden"
+						name="action" value="khoiphuc" />
+					<div class="modal-header">
+						<h5 class="modal-title">Xác nhận khôi phục tài khoản</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<p>Bạn có chắc chắn muốn khôi phục tài khoản này?</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-bs-dismiss="modal">Hủy</button>
+						<button type="submit" class="btn btn-danger">Khôi phục</button>
 					</div>
 				</form>
 			</div>
@@ -307,42 +374,43 @@
 	</script>
 
 	<script type="text/javascript">
-		var editModal = document.getElementById('editModal');
-		editModal.addEventListener('show.bs.modal', function(event) {
-			var button = event.relatedTarget;
-			var account_username = button.getAttribute('data-account-username');
-			var account_password = button.getAttribute('data-account-password');
-			var role_id = button.getAttribute('data-role-id');
-			var account_id = button.getAttribute('data-account-id');
-
-			var modal = this;
-			modal.querySelector('input[name="account_username"]').value = account_username;
-			modal.querySelector('input[name="account_password"]').value = account_password;
-			modal.querySelector('select[name="role_id"]').value = role_id;
-			modal.querySelector('input[name="account_id"]').value = account_id;
-		});
-
-		const viewModal = document.getElementById('viewModal');
-		viewModal.addEventListener('show.bs.modal', function(event) {
-			const button = event.relatedTarget;
-			 // Cập nhật thông tin cho các phần tử trong modal
-		    viewModal.querySelector('.account_username').textContent = button.getAttribute('data-account-username');
-		    viewModal.querySelector('.account_password').textContent = button.getAttribute('data-account-password');
-		    viewModal.querySelector('.role_id').textContent = button.getAttribute('data-role-id');
-		    viewModal.querySelector('.account_created_at').textContent = button.getAttribute('data-account-created-at');
-		    viewModal.querySelector('.account_updated_at').textContent = button.getAttribute('data-account-updated-at');
-		    viewModal.querySelector('.account_login_time').textContent = button.getAttribute('data-account-login-time');
-		    viewModal.querySelector('.account_status').textContent = button.getAttribute('data-account-status');
-		});
-
-		var delModal = document.getElementById('deleteModal');
-		delModal.addEventListener('show.bs.modal', function(event) {
-			var button = event.relatedTarget;
-			var account_id = button.getAttribute('data-account-id');
-
-			var modal = this;
-			modal.querySelector('input[name="account_id"]').value = account_id;
-		});
+		document.addEventListener('DOMContentLoaded', function () {
+		    // Modal Edit
+		    document.getElementById('editModal')?.addEventListener('show.bs.modal', function (event) {
+		        let button = event.relatedTarget;
+		        this.querySelector('input[name="account_username"]').value = button.getAttribute('data-account-username');
+		        this.querySelector('input[name="account_password"]').value = button.getAttribute('data-account-password');
+		        this.querySelector('select[name="role_id"]').value = button.getAttribute('data-role-id');
+		        this.querySelector('input[name="account_id"]').value = button.getAttribute('data-account-id');
+		    });
+	
+		    // Modal View
+		    document.getElementById('viewModal')?.addEventListener('show.bs.modal', function (event) {
+		        let button = event.relatedTarget;
+		        this.querySelector('.account_username').textContent = button.getAttribute('data-account-username');
+		        this.querySelector('.account_password').textContent = button.getAttribute('data-account-password');
+		        this.querySelector('.role_id').textContent = button.getAttribute('data-role-id');
+		        this.querySelector('.account_created_at').textContent = button.getAttribute('data-account-created-at');
+		        this.querySelector('.account_updated_at').textContent = button.getAttribute('data-account-updated-at');
+		        this.querySelector('.account_login_time').textContent = button.getAttribute('data-account-login-time');
+		        this.querySelector('.account_status').textContent = button.getAttribute('data-account-status');
+		    });
+	
+		    // Xóa vĩnh viễn
+		    document.getElementById('deleteModal')?.addEventListener('show.bs.modal', function (event) {
+		        this.querySelector('#account_id_delete').value = event.relatedTarget.getAttribute('data-account-id');
+		    });
+	
+		    // Xóa tạm thời
+		    document.getElementById('deleteModalTam')?.addEventListener('show.bs.modal', function (event) {
+		        this.querySelector('#account_id_tam').value = event.relatedTarget.getAttribute('data-account-id');
+		    });
+	
+		    // Khôi phục
+		    document.getElementById('deleteModalKP')?.addEventListener('show.bs.modal', function (event) {
+		        this.querySelector('#account_id_kp').value = event.relatedTarget.getAttribute('data-account-id');
+		    });
+		});			
 	</script>
 <%@include file="/adjsp/lib/footer.jsp"%>
 </html>

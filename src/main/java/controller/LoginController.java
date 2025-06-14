@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dao.accountDAO;
+import dao.customerDAO;
 import dao.userDAO;
 import model.account;
+import model.customer;
 import model.user;
 
 public class LoginController extends HttpServlet {
@@ -43,12 +45,12 @@ public class LoginController extends HttpServlet {
 		}
 		else if (acc != null && acc.getRole_id() == 2) {
 			
-			user u = userDAO.getInstance().getUserByAccountId(acc.getAccount_id());
+			customer cus = customerDAO.getIns().getCustomerByAccountId(acc.getAccount_id());
 			accountDAO.getIns().updateLastLogin(acc);
 			
 			HttpSession session = req.getSession();			
 			session.setAttribute("account", acc);
-			session.setAttribute("user", u);
+			session.setAttribute("customer", cus);
 			
 			resp.sendRedirect(req.getContextPath() + "/trangchu");
 		} 

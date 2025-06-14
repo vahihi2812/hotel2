@@ -46,6 +46,32 @@ public class booking_reportDAO implements daoInterface<booking_report> {
 		}
         return kq;
     }
+    
+    public int insertdaydu(booking_report t) {
+        int kq = 0;
+        try {
+            String sql = "INSERT INTO booking_report (br_id, br_amount, br_floor_1, br_floor_2, br_floor_3, br_floor_4, br_floor_5) VALUES (?,?,?,?,?,?,?)";
+            //Connection con = JDBCUtil.getConn();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, t.getBr_id());
+            ps.setInt(2, t.getBr_amount());
+            ps.setInt(3, t.getBr_floor_1());
+            ps.setInt(4, t.getBr_floor_2());
+            ps.setInt(5, t.getBr_floor_3());
+            ps.setInt(6, t.getBr_floor_4());
+            ps.setInt(7, t.getBr_floor_5());
+            kq = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("insert booking_report " + e);
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "booking_report");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+        return kq;
+    }
 
     @Override
     public int update(booking_report t) {
@@ -247,5 +273,25 @@ public class booking_reportDAO implements daoInterface<booking_report> {
 			}
 		}
         return list;
+    }
+    
+    public int updateAfterBookingSuccess(int br_id) {
+        int kq = 0;
+        try {
+            String sql = "UPDATE booking_report SET br_amount = br_amount + 1 WHERE br_id = ?";
+            //Connection con = JDBCUtil.getConn();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, br_id);
+            kq = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("update booking_report after booking " + e);
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "booking_report");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+        return kq;
     }
 }

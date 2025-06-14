@@ -1,3 +1,4 @@
+<%@page import="model.customer"%>
 <%@page import="model.account"%>
 <%@page import="dao.userDAO"%>
 <%@page import="model.user"%>
@@ -43,7 +44,7 @@
 <body>
 	<%@include file="/adjsp/chat.jsp"%>	
 		<%
-		user u = (user) session.getAttribute("user");
+		customer cus = (customer) session.getAttribute("customer");
 		account acc = (account) session.getAttribute("account");
 		
 		if (acc == null) {

@@ -55,10 +55,7 @@
 		                            <div class="col-md-3">
 		                                <label class="form-label">Trạng thái</label>
 		                                <select name="rs_id" class="form-select">
-		                                    <option value="all">Tất cả</option>
 		                                    <option value="1" ${param.rs_id == '1' ? 'selected' : ''}>Đang trống</option>
-		                                    <option value="2" ${param.rs_id == '2' ? 'selected' : ''}>Đang được đặt</option>
-		                                    <option value="3" ${param.rs_id == '3' ? 'selected' : ''}>Đang bảo trì</option>
 		                                </select>
 		                            </div>
 		
@@ -128,18 +125,13 @@
 		                                            data-room-rs-id="${r.rs_id}">
 		                                            <i class="bi bi-eye"></i>
 		                                        </button>
-		
-		                                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"
-		                                            data-room-id="${r.room_id}"
-		                                            data-room-name="${r.room_name}"
-		                                            data-room-description="${r.room_description}"
-		                                            data-room-booking-time="${r.room_booking_time}"
-		                                            data-room-view="${r.room_view}"
-		                                            data-room-floor-id="${r.floor_id}"
-		                                            data-room-rt-id="${r.rt_id}"
-		                                            data-room-rs-id="${r.rs_id}">
-		                                            <i class="bi bi-pencil"></i>
-		                                        </button>
+		                                        <c:choose>
+		                                        	<c:when test="${r.rs_id == 1}">
+				                                        <a href="<%= request.getContextPath()%>/chitiet?room_id=${r.room_id}" class="btn btn-warning btn-sm">
+														  <i class="bi bi-calendar-check"></i>
+														</a>		                                        		
+		                                        	</c:when>
+		                                        </c:choose>		
 		                                    </td>
 		                                </tr>
 		                            </c:forEach>
@@ -198,72 +190,6 @@
 	            </div>
 	        </div>
 	    </div>
-	</div>
-
-
-
-	<!-- Edit Customer Modal -->
-	<div class="modal fade" id="editModal" tabindex="-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Chỉnh sửa khách hàng</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-				</div>
-				<div class="modal-body">
-					<form id="editForm" action="rooms" method="post">
-						<input type="hidden" name="room_id" />
-						<input type="hidden" name="action" value="edit" />
-	
-						<div class="mb-3">
-							<label class="form-label">Tên phòng</label>
-							<input type="text" class="form-control" name="room_name" required disabled/>
-						</div>
-						
-						<div class="mb-3">
-							<label class="form-label">Mô tả</label>
-							<textarea class="form-control" name="room_description" required></textarea>
-						</div>
-						
-						<div class="mb-3">
-							<label class="form-label">Số lần đặt</label>
-							<input type="text" class="form-control" name="room_booking_time" required disabled/>
-						</div>
-						
-						<div class="mb-3">
-							<label class="form-label">View</label>
-							<input type="text" class="form-control" name="room_view" required/>
-						</div>
-						
-						<div class="mb-3">
-							<label class="form-label">Tầng</label>
-							<input type="text" class="form-control" name="floor_id" required disabled/>
-						</div>
-						
-						<div class="mb-3">
-							<label class="form-label">Loại phòng</label> <select
-								class="form-select" name="rt_id" required>
-								<option value="1">Bình dân</option>
-								<option value="2">Cao cấp</option>
-							</select>
-						</div>
-						
-						<div class="mb-3">
-							<label class="form-label">Trạng thái</label> <select
-								class="form-select" name="rs_id" required>
-								<option value="1">Đang trống</option>
-								<option value="2">Đang được đặt</option>
-								<option value="3">Đang bảo trì</option>
-							</select>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-					<button type="submit" form="editForm" class="btn btn-primary">Lưu thay đổi</button>
-				</div>
-			</div>
-		</div>
 	</div>
 
 	<script type="text/javascript">

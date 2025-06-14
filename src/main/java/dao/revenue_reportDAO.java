@@ -48,6 +48,33 @@ public class revenue_reportDAO implements daoInterface<revenue_report> {
 		}
         return kq;
     }
+    
+    public int insertdaydu(revenue_report t) {
+        int kq = 0;
+        try {
+            String sql = "INSERT INTO revenue_report (rr_id, rr_amount, rr_room, rr_spa, rr_sport, rr_service, rr_food) VALUES (?,?,?,?,?,?,?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, t.getRr_id());
+            ps.setDouble(2, t.getRr_amount());
+            ps.setDouble(3, t.getRr_room());
+            ps.setDouble(4, t.getRr_spa());
+            ps.setDouble(5, t.getRr_sport());
+            ps.setDouble(6, t.getRr_service());
+            ps.setDouble(7, t.getRr_food());
+
+            kq = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Insert revenue_report error: " + e);
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "revenue_report");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+        return kq;
+    }
 
     @Override
     public int update(revenue_report t) {
@@ -227,5 +254,28 @@ public class revenue_reportDAO implements daoInterface<revenue_report> {
 			}
 		}
         return list;
+    }
+    
+    public int updateAfterBookig(double r_cost, int rr_id) {
+        int kq = 0;
+        try {
+            String sql = "UPDATE revenue_report SET rr_amount = rr_amount + ? WHERE rr_id = ?";
+            
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setDouble(1, r_cost);
+            ps.setInt(2, rr_id);
+
+            kq = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Update revenue_report error: " + e);
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "revenue_report");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+        return kq;
     }
 }

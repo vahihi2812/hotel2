@@ -33,6 +33,10 @@ public class ajaxServlet extends HttpServlet {
 			resp.sendRedirect("phong");
 			return;
 		}
+		// room_id, rent_day
+		String r_id = req.getParameter("r_id");
+		String re = req.getParameter("re");
+		
 		double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
 		int orderId = new Random().nextInt() * 100;
 		
@@ -57,7 +61,7 @@ public class ajaxServlet extends HttpServlet {
 			vnp_Params.put("vnp_BankCode", bankCode);
 		}
 		vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-		vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+		vnp_Params.put("vnp_OrderInfo", r_id + "_" + re + "_" + amountDouble);
 		vnp_Params.put("vnp_OrderType", orderType);
 
 		String locate = req.getParameter("language");

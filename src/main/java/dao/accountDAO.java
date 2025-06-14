@@ -33,7 +33,6 @@ public class accountDAO implements daoInterface<account> {
         int kq = 0;
         try {
             String sql = "INSERT INTO account (account_username, account_password, account_status, role_id) VALUES (?, ?, ?, ?)";
-            //Connection con = JDBCUtil.getConn();
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, t.getAccount_username());
             ps.setString(2, t.getAccount_password());
@@ -141,29 +140,6 @@ public class accountDAO implements daoInterface<account> {
             kq = ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("update account " + e);
-        }finally {
-        	try {
-				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "account");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-        return kq;
-    }
-
-    @Override
-    public int delete(account t) {
-        int kq = 0;
-        try {
-            String sql = "DELETE FROM account WHERE account_id = ?";
-            //Connection con = JDBCUtil.getConn();
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, t.getAccount_id());
-            
-            kq = ps.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("delete account " + e);
         }finally {
         	try {
 				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "account");
@@ -362,6 +338,49 @@ public class accountDAO implements daoInterface<account> {
 			}
 		}
         return accountId;
+    }
+    
+    @Override
+    public int delete(account t) {
+        int kq = 0;
+        try {
+            String sql = "DELETE FROM account WHERE account_id = ?";
+            //Connection con = JDBCUtil.getConn();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, t.getAccount_id());
+            
+            kq = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("delete account " + e);
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "account");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+        return kq;
+    }
+    
+    public int xoa_khoiphuc(int account_id, int account_status) {
+        int kq = 0;
+        try {
+            String sql = "UPDATE account SET account_status = ? WHERE account_id = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, account_status);
+            ps.setInt(2, account_id);
+            
+            kq = ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("xoa khoi phuc account " + e);
+        }finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "account");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+        return kq;
     }
 
 

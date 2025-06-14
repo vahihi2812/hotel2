@@ -264,4 +264,37 @@ public class customerDAO implements daoInterface<customer> {
 		}
 		return list;
 	}
+	
+	public customer getCustomerByAccountId(int id) {
+		customer c = null;
+		String sql = "SELECT * FROM customer WHERE account_id = ?";
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				c = new customer();
+				c.setCustomer_id(rs.getInt("customer_id"));
+				c.setCustomer_firstname(rs.getString("customer_firstname"));
+				c.setCustomer_lastname(rs.getString("customer_lastname"));
+				c.setCustomer_date_of_birth(rs.getDate("customer_date_of_birth"));
+				c.setCustomer_gender(rs.getInt("customer_gender"));
+				c.setCustomer_phone_number(rs.getString("customer_phone_number"));
+				c.setCustomer_email(rs.getString("customer_email"));
+				c.setCustomer_address(rs.getString("customer_address"));
+				c.setCustomer_cccd(rs.getString("customer_cccd"));
+				c.setCustomer_booking_time(rs.getInt("customer_booking_time"));
+				c.setAccount_id(rs.getInt("account_id"));
+			}
+		} catch (Exception e) {
+			System.out.println("get Customer By Account ID " + e);
+		}finally {
+        	try {
+				ConnectionPoolImpl.getInstance().releaseConnection(this.con, "customer");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return c;
+	}
 }

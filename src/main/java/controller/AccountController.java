@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,19 +30,26 @@ public class AccountController extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<account> list, list_acc_admin, list_acc_cus;
+	private ArrayList<account> list, list_acc_admin, list_acc_cus, list_acc_xoa_tam_thoi, list_chua_xoa;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		list = accountDAO.getIns().selectAll();
 		list_acc_admin = new ArrayList<>();
 		list_acc_cus = new ArrayList<>();
+		list_acc_xoa_tam_thoi = new ArrayList<>();
+		list_chua_xoa = new ArrayList<>();
 
 		for (account a : list) {
-			if (a.getRole_id() == 1) {
-				list_acc_admin.add(a);
-			} else {
-				list_acc_cus.add(a);
+			if (a.getAccount_status() == 1) {
+				list_chua_xoa.add(a);
+				if (a.getRole_id() == 1) {
+					list_acc_admin.add(a);
+				} else if (a.getRole_id() == 2) {
+					list_acc_cus.add(a);
+				}
+			} else if (a.getAccount_status() == 0) {
+				list_acc_xoa_tam_thoi.add(a);
 			}
 		}
 
@@ -51,6 +59,10 @@ public class AccountController extends HttpServlet {
 			list = list_acc_cus;
 		} else if ("admin".equals(action)) {
 			list = list_acc_admin;
+		} else if ("tam".equals(action)) {
+			list = list_acc_xoa_tam_thoi;
+		} else {
+			list = list_chua_xoa;
 		}
 
 		req.setAttribute("filter", action == null ? "all" : action);
@@ -74,6 +86,14 @@ public class AccountController extends HttpServlet {
 		}
 		case "delete": {
 			delAcc(req, resp);
+			break;
+		}
+		case "delete_tam": {
+			delTamAcc(req, resp);
+			break;
+		}
+		case "khoiphuc": {
+			KPAcc(req, resp);
 			break;
 		}
 		case "edit": {
@@ -117,12 +137,68 @@ public class AccountController extends HttpServlet {
 	private void delAcc(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		int account_id = Integer.parseInt(req.getParameter("account_id"));
 
+		HttpSession session = req.getSession();
+		account acc_main_id = (account) session.getAttribute("account");
+		int acc_id = acc_main_id.getAccount_id();
+
 		String message = "";
 		int kq = 0;
 
-		account acc = accountDAO.getIns().selectById(account_id);
-		if (acc.getAccount_status() == 0) {
-			kq = accountDAO.getIns().delete(acc);
+		if (acc_id == account_id) {
+			kq = -1;
+		}
+
+		if (kq != -1) {
+			account acc = accountDAO.getIns().selectById(account_id);
+			
+			if(acc.getRole_id() == 2) {
+				customer cus = customerDAO.getIns().getCustomerByAccountId(account_id);
+				kq = customerDAO.getIns().delete(cus);
+			}
+			
+			if (acc.getAccount_status() == 0) {
+				kq = accountDAO.getIns().delete(acc);
+			}
+		}
+
+		if (kq > 0) {
+			message = "success";
+		} else {
+			message = "fail";
+		}
+		resp.sendRedirect(req.getContextPath() + "/accounts?message=" + message);
+	}
+
+	private void delTamAcc(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		int account_id = Integer.parseInt(req.getParameter("account_id"));
+
+		String message = "";
+		int kq = 0;
+
+		try {
+			kq = accountDAO.getIns().xoa_khoiphuc(account_id, 0);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		if (kq > 0) {
+			message = "success";
+		} else {
+			message = "fail";
+		}
+		resp.sendRedirect(req.getContextPath() + "/accounts?message=" + message);
+	}
+
+	private void KPAcc(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		int account_id = Integer.parseInt(req.getParameter("account_id"));
+
+		String message = "";
+		int kq = 0;
+
+		try {
+			kq = accountDAO.getIns().xoa_khoiphuc(account_id, 1);
+		} catch (Exception e) {
+			System.out.println(e);
 		}
 
 		if (kq > 0) {

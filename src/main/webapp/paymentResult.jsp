@@ -32,7 +32,7 @@
                 <p style="font-size: 18px; margin-top: 15px;">Vui lòng để ý số điện thoại của nhân viên tư vấn:</p>
                 <strong style="color: red; font-size: 24px;">0383459560</strong>
             </div>
-            <a href="<%=request.getContextPath() %>/chitiet">Trở về</a>
+            <a href="<%=request.getContextPath() %>/phong">Trở về</a>
         </c:if>
 
         <!-- Giao dịch thất bại -->
@@ -45,7 +45,7 @@
                 <p style="font-size: 18px;">Liên hệ tổng đài để được tư vấn:</p>
                 <strong style="color: red; font-size: 24px;">0383456xxx</strong>
             </div>
-            <a href="<%=request.getContextPath() %>/chitiet">Trở về</a>
+            <a href="<%=request.getContextPath() %>/phong">Trở về</a>
         </c:if>
 
         <!-- Đang xử lý giao dịch -->
@@ -57,7 +57,7 @@
                 <p style="font-size: 18px; margin-top: 15px;">Vui lòng để ý số điện thoại của nhân viên tư vấn:</p>
                 <strong style="color: red; font-size: 24px;">0383456xxx</strong>
             </div>
-            <a href="<%=request.getContextPath() %>/chitiet">Trở về</a>
+            <a href="<%=request.getContextPath() %>/phong">Trở về</a>
         </c:if>
     </section>
 

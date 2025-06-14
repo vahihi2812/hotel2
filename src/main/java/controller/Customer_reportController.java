@@ -26,7 +26,9 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 
+import dao.customer_addressDAO;
 import dao.customer_reportDAO;
+import model.customer_address;
 import model.customer_report;
 
 public class Customer_reportController extends HttpServlet {
@@ -99,6 +101,10 @@ public class Customer_reportController extends HttpServlet {
 		req.setAttribute("s", start_date);
 		req.setAttribute("e", end_date);
 		req.setAttribute("list", this.list);
+		
+		ArrayList<customer_address> list_add = customer_addressDAO.getIns().selectAll();
+		req.setAttribute("list_add", list_add);
+		
 		req.getRequestDispatcher("/adjsp/customer_report.jsp").forward(req, resp);
 	}
 	

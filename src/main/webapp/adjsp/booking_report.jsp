@@ -10,6 +10,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
+	<link href="adcss/style_high_chart.css" rel="stylesheet">
 	<%@include file="/adjsp/lib/header.jsp"%>
 	<%@include file="/adjsp/lib/sidebar.jsp"%>
 <body>
@@ -115,6 +116,9 @@
 	                        <canvas id="reportsChart" style="max-height: 400px;"></canvas>
 	                        <h5 class="card-title">Tỉ lệ đặt phòng</h5>
 	                        <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+	                        <figure class="highcharts-figure">
+						        <div id="container"></div>
+						    </figure>
 	
 	                        <!-- Bảng thống kê -->
 	                        <div>
@@ -330,6 +334,24 @@
 	    const form = document.getElementById('forecast-form');
 	    const formData = new FormData(form);
 	
+	    const dateValue = formData.get('d')?.trim();
+	    const numberValue = formData.get('n')?.trim();
+	    const number = parseInt(numberValue, 10);
+	
+	    // ✅ VALIDATE TRƯỚC KHI GỬI
+	    if (!dateValue) {
+	        alert("Vui lòng chọn ngày bắt đầu.");
+	        form.querySelector('input[name="d"]').focus();
+	        return;
+	    }
+	
+	    if (!numberValue || isNaN(number) || number <= 0) {
+	        alert("Vui lòng nhập số lượng là số nguyên dương.");
+	        form.querySelector('input[name="n"]').focus();
+	        return;
+	    }
+	
+	    // ✅ GỬI FETCH NẾU HỢP LỆ
 	    fetch('booking_report?action=forecast', {
 	        method: 'POST',
 	        body: new URLSearchParams(formData)
@@ -338,45 +360,46 @@
 	        if (!response.ok) {
 	            throw new Error('HTTP status ' + response.status);
 	        }
-	        return response.json(); // OK thì mới parse JSON
+	        return response.json();
 	    })
 	    .then(data => {
-		    console.log("Forecast data:", data);  // Thêm dòng này
-		    const tbodyList = document.querySelectorAll('tbody');
-		    const tbody = tbodyList[1];
-		    tbody.innerHTML = "";
-		
-		    if (data.error) {
-		        alert("Lỗi từ server: " + data.error);
-		        return;
-		    }
-		
-		    let index = 1;
-		    for (const [date, value] of Object.entries(data)) {
-		        const tr = document.createElement('tr');
-		
-		        const tdIndex = document.createElement('td');
-		        tdIndex.innerText = index;
-		
-		        const tdDate = document.createElement('td');
-		        tdDate.innerText = date;
-		
-		        const tdValue = document.createElement('td');
-		        tdValue.innerText = value;
-		
-		        tr.appendChild(tdIndex);
-		        tr.appendChild(tdDate);
-		        tr.appendChild(tdValue);
-		
-		        tbody.appendChild(tr);
-		        index++;
-		    }
-		})
+	        console.log("Forecast data:", data);
+	        const tbodyList = document.querySelectorAll('tbody');
+	        const tbody = tbodyList[1]; // Đảm bảo tbody[1] đúng là chỗ bạn muốn render
+	
+	        tbody.innerHTML = "";
+	
+	        if (data.error) {
+	            alert("Lỗi từ server: " + data.error);
+	            return;
+	        }
+	
+	        let index = 1;
+	        for (const [date, value] of Object.entries(data)) {
+	            const tr = document.createElement('tr');
+	
+	            const tdIndex = document.createElement('td');
+	            tdIndex.innerText = index;
+	
+	            const tdDate = document.createElement('td');
+	            tdDate.innerText = date;
+	
+	            const tdValue = document.createElement('td');
+	            tdValue.innerText = value;
+	
+	            tr.appendChild(tdIndex);
+	            tr.appendChild(tdDate);
+	            tr.appendChild(tdValue);
+	
+	            tbody.appendChild(tr);
+	            index++;
+	        }
+	    })
 	    .catch(err => {
 	        console.error('Lỗi dự đoán:', err);
 	        alert("Không thể lấy dữ liệu dự đoán.");
 	    });
-	 }
+	}
 	</script>
 	<!-- END FORECAST -->
 
@@ -606,23 +629,23 @@
                         show: false
                       },
                       data: [{
-                        value: <%= list_ty_le.get(0) %>,
+                        value: <%=list_ty_le.get(0)%>,
                         name: 'Tầng 1'
                       },
                       {
-                        value: <%= list_ty_le.get(1) %>,
+                        value: <%=list_ty_le.get(1)%>,
                         name: 'Tầng 2'
                       },
                       {
-                        value: <%= list_ty_le.get(2) %>,
+                        value: <%=list_ty_le.get(2)%>,
                         name: 'Tầng 3'
                       },
                       {
-                        value: <%= list_ty_le.get(3) %>,
+                        value: <%=list_ty_le.get(3)%>,
                         name: 'Tầng 4'
                       },
                       {
-                          value: <%= list_ty_le.get(4) %>,
+                          value: <%=list_ty_le.get(4)%>,
                           name: 'Tầng 5'
                        }
                       ]
@@ -630,6 +653,58 @@
                   });
                 });
     </script>
+    
+    <!-- High chart -->
+	<script>
+	    Highcharts.chart('container', {
+	        chart: {
+	            type: 'pie',
+	            options3d: {
+	                enabled: true,
+	                alpha: 45,
+	                beta: 0
+	            }
+	        },
+	        title: {
+	            text: 'Tương quan đặt phòng'
+	        },
+	        subtitle: {
+	            text: 'Đơn vị: %'
+	        },
+	        accessibility: {
+	            point: {
+	                valueSuffix: '%'
+	            }
+	        },
+	        tooltip: {
+	            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: true,
+	                cursor: 'pointer',
+	                depth: 35,
+	                dataLabels: {
+	                    enabled: true,
+	                    format: '{point.name}'
+	                }
+	            }
+	        },
+	        series: [{
+	            type: 'pie',
+	            name: 'lượt',
+	            data: [
+	                ['Tầng 1', <%= list_ty_le.get(0) %>],
+	                ['Tầng 2', <%= list_ty_le.get(1) %>],
+	                ['Tầng 3', <%= list_ty_le.get(2) %>],
+	                ['Tầng 4', <%= list_ty_le.get(3) %>],
+	                ['Tầng 5', <%= list_ty_le.get(4) %>]
+	            ]
+	        }]
+	    });
+	
+	</script>
+	<!-- End High chart -->
     
     <!-- Date -->
     <script>
